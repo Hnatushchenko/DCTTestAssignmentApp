@@ -4,6 +4,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 17.4.33205.214
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DCTTestAssignment", "DCTTestAssignment\DCTTestAssignment.csproj", "{60483BE3-36EC-4C70-9B13-7C5582596D45}"
+	ProjectSection(ProjectDependencies) = postProject
+		{35B4669E-432B-4C04-9341-69A555F9DF3F} = {35B4669E-432B-4C04-9341-69A555F9DF3F}
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CoinGecko", "CoinGecko\CoinGecko.csproj", "{35B4669E-432B-4C04-9341-69A555F9DF3F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +20,10 @@ Global
 		{60483BE3-36EC-4C70-9B13-7C5582596D45}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{60483BE3-36EC-4C70-9B13-7C5582596D45}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{60483BE3-36EC-4C70-9B13-7C5582596D45}.Release|Any CPU.Build.0 = Release|Any CPU
+		{35B4669E-432B-4C04-9341-69A555F9DF3F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{35B4669E-432B-4C04-9341-69A555F9DF3F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{35B4669E-432B-4C04-9341-69A555F9DF3F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{35B4669E-432B-4C04-9341-69A555F9DF3F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

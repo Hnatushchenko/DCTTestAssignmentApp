@@ -1,4 +1,5 @@
 ﻿using Caliburn.Micro;
+using CoinGecko;
 using DCTTestAssignment.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -28,6 +29,7 @@ public class Bootstrapper : BootstrapperBase
     {
         _container.Singleton<IWindowManager, WindowManager>();
         _container.Singleton<ShellViewModel>();
+        _container.Singleton<ICoinGeckoApiClient, CoinGeckoApiClient>();
     }
 
     protected override object GetInstance(Type service, string key)
