@@ -10,45 +10,48 @@ namespace CoinGecko.Responces;
 
 public class CoinsMarkets
 {
-    [JsonPropertyName("id")]
+    [JsonProperty("id")]
     public string? Id { get; set; }
 
-    [JsonPropertyName("symbol")]
+    [JsonProperty("symbol")]
     public string? Symbol { get; set; }
 
-    [JsonPropertyName("name")]
+    [JsonProperty("name")]
     public string? Name { get; set; }
 
-    [JsonPropertyName("image")]
+    [JsonProperty("image")]
     public Uri? Image { get; set; }
 
-    [JsonPropertyName("current_price")]
+    [JsonProperty("current_price")]
     public decimal? CurrentPrice { get; set; }
 
-    [JsonPropertyName("market_cap")]
+    [JsonProperty("market_cap")]
     public decimal? MarketCap { get; set; }
 
-    [JsonPropertyName("total_volume")]
+    [JsonProperty("market_cap_rank")]
+    public int? MarketCapRank { get; set; }
+
+    [JsonProperty("total_volume")]
     public decimal? TotalVolume { get; set; }
 
-    [JsonPropertyName("high_24h")]
+    [JsonProperty("high_24h")]
     public decimal? High24H { get; set; }
 
-    [JsonPropertyName("low_24h")]
+    [JsonProperty("low_24h")]
     public decimal? Low24H { get; set; }
 
-    [JsonPropertyName("ath")]
+    [JsonProperty("ath")]
     public decimal? Ath { get; set; }
 
-    [JsonPropertyName("ath_change_percentage")]
+    [JsonProperty("ath_change_percentage")]
     public decimal? AthChangePercentage { get; set; }
 
-    [JsonPropertyName("ath_date")]
+    [JsonProperty("ath_date")]
     public DateTimeOffset? AthDate { get; set; }
 
-    [JsonPropertyName("roi")]
+    [JsonProperty("roi")]
     public Roi? Roi { get; set; }
 
-    [JsonPropertyName("last_updated")]
+    [JsonProperty("last_updated")]
     public DateTimeOffset? LastUpdated { get; set; }
 }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,16 +10,16 @@ namespace CoinGecko.Responces
 {
     public class CoinsListItem
     {
-        [JsonPropertyName("id")]
+        [JsonProperty("id")]
         public string? Id { get; set; }
 
-        [JsonPropertyName("symbol")]
+        [JsonProperty("symbol")]
         public string? Symbol { get; set; }
 
-        [JsonPropertyName("name")]
+        [JsonProperty("name")]
         public string? Name { get; set; }
 
-        [JsonPropertyName("platforms")]
+        [JsonProperty("platforms")]
         public Dictionary<string, string>? Platforms { get; set; }
     }
 }

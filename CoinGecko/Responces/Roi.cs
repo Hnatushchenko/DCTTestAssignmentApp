@@ -10,9 +10,9 @@ namespace CoinGecko.Responces;
 
 public class Roi
 {
-    [JsonPropertyName("times")] public decimal? Times { get; set; }
+    [JsonProperty("times")] public decimal? Times { get; set; }
 
-    [JsonPropertyName("currency")] public string? Currency { get; set; }
+    [JsonProperty("currency")] public string? Currency { get; set; }
 
-    [JsonPropertyName("percentage")] public decimal? Percentage { get; set; }
+    [JsonProperty("percentage")] public decimal? Percentage { get; set; }
 }
