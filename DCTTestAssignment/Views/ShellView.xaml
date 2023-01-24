@@ -12,23 +12,18 @@
     </Window.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="10" />
-            <ColumnDefinition Width="auto" />
-            <ColumnDefinition Width="auto" />
-            <ColumnDefinition Width="auto" />
-            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />  
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="30"/>
-            <RowDefinition Height="auto"/>
-            <RowDefinition Height="auto"/>
-            <RowDefinition Height="auto"/>
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-        <DataGrid Grid.Row="1" Grid.Column="1" x:Name="Top10Coins" CanUserAddRows="False" AutoGenerateColumns="False">
+        <DataGrid Grid.Row="1" Grid.Column="1" x:Name="Top10Coins" CanUserAddRows="False" AutoGenerateColumns="False" 
+                  HorizontalAlignment="Center" VerticalAlignment="Center" CanUserResizeRows="False" 
+                  CanUserReorderColumns="False" CanUserResizeColumns="False" IsReadOnly="True"
+                  GridLinesVisibility="None" HeadersVisibility="Column">
             <DataGrid.Columns>
-                <DataGridTextColumn Header="#" Binding="{Binding MarketCapRank}" CanUserResize="False" CanUserReorder="False"/>
-                <DataGridTemplateColumn Header="Name" CanUserResize="False" CanUserReorder="False">
+                <DataGridTextColumn Header="#" Binding="{Binding MarketCapRank}" />
+                <DataGridTemplateColumn Header="Name"  >
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <StackPanel Orientation="Horizontal">
@@ -39,9 +34,28 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTextColumn Header="Price" Binding="{Binding CurrentPrice}" CanUserResize="False" CanUserReorder="False"/>
-                <DataGridTextColumn Header="Volume(24h)" Binding="{Binding CurrentPrice}" CanUserResize="False" CanUserReorder="False"/>
+                <DataGridTextColumn Header="Price" Binding="{Binding CurrentPrice}"  />
+                <DataGridTextColumn Header="Volume(24h)" Binding="{Binding CurrentPrice}"  />
             </DataGrid.Columns>
+            <DataGrid.RowStyle>
+                <Style TargetType="DataGridRow">
+                    <Setter Property="Padding" Value="10 0 0 10" />
+                </Style>
+            </DataGrid.RowStyle>
+            <DataGrid.CellStyle>
+                <Style TargetType="DataGridCell">
+                    <Setter Property="Margin" Value="10" />
+                    <Setter Property="BorderThickness" Value="0" />
+                    <Setter Property="Foreground" Value="Black" />
+                    <Setter Property="BorderBrush" Value="Transparent" />
+                    <Style.Triggers>
+                        <Trigger Property="IsSelected" Value="True">
+                            <Setter Property="Background" Value="{x:Null}" />
+                            <Setter Property="BorderBrush" Value="{x:Null}" />
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </DataGrid.CellStyle>
         </DataGrid>
     </Grid>
 </Window>
