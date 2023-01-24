@@ -4,6 +4,6 @@ namespace CoinGecko
 {
     public interface ICoinGeckoApiClient
     {
-        Task<IReadOnlyCollection<CoinsListItem>?> GetCoinsList();
+        Task<IReadOnlyCollection<CoinsMarkets>> GetCoinsMarkets();
     }
 }

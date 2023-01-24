@@ -24,10 +24,16 @@ namespace CoinGecko
             };
         }
 
-        public async Task<IReadOnlyCollection<CoinsListItem>?> GetCoinsList()
+        public async Task<IReadOnlyCollection<CoinsMarkets>> GetCoinsMarkets()
         {
-            var coinsList = await _httpClient.GetFromJsonAsync<IReadOnlyCollection<CoinsListItem>>(ApiEndPoints.CoinsList);
-            return coinsList;
+            var coinsMarketsList = await _httpClient.GetFromJsonAsync<IReadOnlyCollection<CoinsMarkets>>(ApiEndPoints.CoinsMarkets);
+
+            if (coinsMarketsList is null)
+            {
+                throw new HttpRequestException("Responce is empty");
+            }
+
+            return coinsMarketsList!;
         }
     }
 }
