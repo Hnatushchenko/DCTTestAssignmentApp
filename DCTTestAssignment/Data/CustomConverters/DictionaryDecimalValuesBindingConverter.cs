@@ -8,7 +8,7 @@ using System.Windows.Data;
 
 namespace DCTTestAssignment.Data.CustomConverters;
 
-public class DictionaryValuesBindingConverter : IValueConverter
+public class DictionaryDecimalValuesBindingConverter : IValueConverter
 {
     public object? Convert(object value, Type targetType, object parameter, CultureInfo culture)
     {
