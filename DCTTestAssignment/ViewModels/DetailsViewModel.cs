@@ -12,18 +12,25 @@ namespace DCTTestAssignment.ViewModels;
 
 public class DetailsViewModel : Screen
 {
-    private readonly string _cryptocurrencyId;
     private readonly ICoinGeckoApiClient _coinGeckoApiClient;
 
-    public DetailsViewModel(string cryptocurrencyId, ICoinGeckoApiClient coinGeckoApiClient)
+    public DetailsViewModel(ICoinGeckoApiClient coinGeckoApiClient)
     {
-        _cryptocurrencyId = cryptocurrencyId;
         _coinGeckoApiClient = coinGeckoApiClient;
+        //if (string.IsNullOrEmpty(CryptocurrencyId))
+        //{
+        //    throw new Exception($"{nameof(CryptocurrencyId)} must be not null and not an empty string");
+        //}
+        //CoinFullData = _coinGeckoApiClient.GetCoinFullDataAsync(CryptocurrencyId).Result;
     }
 
-    protected override async Task OnActivateAsync(CancellationToken cancellationToken)
+    protected override async Task OnInitializeAsync(CancellationToken cancellationToken)
     {
-        CoinFullData = await _coinGeckoApiClient.GetCoinFullDataAsync(_cryptocurrencyId);
+        if (string.IsNullOrEmpty(CryptocurrencyId))
+        {
+            throw new Exception($"{nameof(CryptocurrencyId)} must be not null and not an empty string");
+        }
+        CoinFullData = await _coinGeckoApiClient.GetCoinFullDataAsync(CryptocurrencyId);
     }
 
     private CoinFullData? _coinFullData;
@@ -34,7 +41,9 @@ public class DetailsViewModel : Screen
         set
         {
             _coinFullData = value;
-            NotifyOfPropertyChange(() => _coinFullData);
+            NotifyOfPropertyChange(() => CoinFullData);
         }
     }
+
+    public string? CryptocurrencyId { get; set; } = "bitcoin";
 }

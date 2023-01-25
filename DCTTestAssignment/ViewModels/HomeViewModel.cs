@@ -8,16 +8,21 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows.Input;
 
 namespace DCTTestAssignment.ViewModels
 {
     public class HomeViewModel : Screen
     {
         private readonly ICoinGeckoApiClient _coinGeckoApiClient;
+        private readonly SimpleContainer _container;
+        private readonly ShellViewModel _shellViewModel;
 
-        public HomeViewModel(ICoinGeckoApiClient coinGeckoApiClient)
+        public HomeViewModel(ICoinGeckoApiClient coinGeckoApiClient, ShellViewModel shellViewModel, SimpleContainer container)
         {
             _coinGeckoApiClient = coinGeckoApiClient;
+            _shellViewModel = shellViewModel;
+            _container = container;
         }
 
         protected override async Task OnInitializeAsync(CancellationToken cancellationToken)
@@ -36,6 +41,13 @@ namespace DCTTestAssignment.ViewModels
                 _top10Coins = value;
                 NotifyOfPropertyChange(() => Top10Coins);
             }
+        }
+
+        public async Task OpenDetails(string id)
+        {
+            var detailsVM = _container.GetInstance<DetailsViewModel>();
+            detailsVM.CryptocurrencyId = id;
+            await _shellViewModel.ActivateItemAsync(detailsVM);
         }
     }
 }
