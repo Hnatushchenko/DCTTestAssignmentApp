@@ -4,6 +4,7 @@ namespace CoinGecko
 {
     public interface ICoinGeckoApiClient
     {
-        Task<IReadOnlyCollection<CoinsMarkets>> GetCoinsMarkets(string currency = "usd");
+        Task<IReadOnlyCollection<CoinsMarkets>> GetCoinsMarketsAsync(string currency = "usd");
+        Task<CoinFullData> GetCoinFullDataAsync(string id);
     }
 }

@@ -26,7 +26,7 @@ namespace CoinGecko
             };
         }
 
-        public async Task<IReadOnlyCollection<CoinsMarkets>> GetCoinsMarkets(string currency = "usd")
+        public async Task<IReadOnlyCollection<CoinsMarkets>> GetCoinsMarketsAsync(string currency = "usd")
         {
             var response = await _httpClient.SendAsync(new HttpRequestMessage(HttpMethod.Get, ApiEndPoints.CoinsMarkets + $"?vs_currency={currency}&order=market_cap_desc&per_page=100&page=1&sparkline=false"))
                 .ConfigureAwait(false);
@@ -43,6 +43,25 @@ namespace CoinGecko
             }
 
             return coinsMarketsList;
+        }
+
+        public async Task<CoinFullData> GetCoinFullDataAsync(string id)
+        {
+            var response = await _httpClient.SendAsync(new HttpRequestMessage(HttpMethod.Get, ApiEndPoints.AllDataByCoinId(id) + "?localization=false"))
+                .ConfigureAwait(false);
+
+            response.EnsureSuccessStatusCode();
+
+            var responseContent = await response.Content.ReadAsStringAsync();
+
+            var coinFullData = JsonConvert.DeserializeObject<CoinFullData>(responseContent);
+
+            if (coinFullData is null)
+            {
+                throw new HttpRequestException("Responce is empty");
+            }
+
+            return coinFullData;
         }
     }
 }
