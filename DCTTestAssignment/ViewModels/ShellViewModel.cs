@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace DCTTestAssignment.ViewModels;
@@ -16,7 +17,11 @@ public class ShellViewModel : Conductor<object>
     public ShellViewModel(SimpleContainer container)
 	{
         _container = container;
-        ActivateItemAsync(_container.GetInstance<HomeViewModel>()).Wait();
+    }
+
+    protected override async Task OnInitializeAsync(CancellationToken cancellationToken)
+    {
+        await ActivateItemAsync(_container.GetInstance<HomeViewModel>());
     }
 
     public async Task LoadHomePage()

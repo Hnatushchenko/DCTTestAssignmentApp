@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace DCTTestAssignment.ViewModels
@@ -16,9 +17,14 @@ namespace DCTTestAssignment.ViewModels
         public HomeViewModel(ICoinGeckoApiClient coinGeckoApiClient)
         {
             _coinGeckoApiClient = coinGeckoApiClient;
-            Top10Coins = new BindableCollection<CoinsMarkets>(_coinGeckoApiClient.GetCoinsMarkets().Result.Take(10));
         }
 
-        public BindableCollection<CoinsMarkets> Top10Coins { get; set; }
+        protected override async Task OnActivateAsync(CancellationToken cancellationToken)
+        {
+            var coins = (await _coinGeckoApiClient.GetCoinsMarketsAsync()).Take(10);
+            Top10Coins = new BindableCollection<CoinsMarkets>(coins);
+        }
+
+        public BindableCollection<CoinsMarkets> Top10Coins { get; set; } = null!;
     }
 }
