@@ -41,12 +41,12 @@
                 <TextBlock FontSize="20" Text="%" VerticalAlignment="Center"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal">
-                <TextBlock Text="1h %: " FontSize="20" MinWidth="120" HorizontalAlignment="Right"/>
+                <TextBlock Text="24h %: " FontSize="20" MinWidth="120" HorizontalAlignment="Right"/>
                 <TextBlock FontSize="20" Text="{Binding CoinFullData.MarketData.PriceChangePercentage24HInCurrency, Converter={StaticResource DictionaryDoubleValuesBindingConverter}, ConverterParameter=usd, StringFormat={}{0:N2}}" VerticalAlignment="Center"/>
                 <TextBlock FontSize="20" Text="%" VerticalAlignment="Center"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal">
-                <TextBlock Text="1h %: " FontSize="20" MinWidth="120" HorizontalAlignment="Right"/>
+                <TextBlock Text="7d %: " FontSize="20" MinWidth="120" HorizontalAlignment="Right"/>
                 <TextBlock FontSize="20" Text="{Binding CoinFullData.MarketData.PriceChangePercentage7DInCurrency, Converter={StaticResource DictionaryDoubleValuesBindingConverter}, ConverterParameter=usd, StringFormat={}{0:N2}}" VerticalAlignment="Center"/>
                 <TextBlock FontSize="20" Text="%" VerticalAlignment="Center"/>
             </StackPanel>
