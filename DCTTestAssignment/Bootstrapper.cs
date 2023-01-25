@@ -27,9 +27,19 @@ public class Bootstrapper : BootstrapperBase
 
     protected override void Configure()
     {
+        _container.Instance(_container);
         _container.Singleton<IWindowManager, WindowManager>();
-        _container.Singleton<ShellViewModel>();
+        _container.Singleton<IEventAggregator, EventAggregator>();
         _container.Singleton<ICoinGeckoApiClient, CoinGeckoApiClient>();
+        foreach (var assembly in SelectAssemblies())
+        {
+            assembly.GetTypes()
+           .Where(type => type.IsClass)
+           .Where(type => type.Name.EndsWith("ViewModel"))
+           .ToList()
+           .ForEach(viewModelType => _container.RegisterPerRequest(
+               viewModelType, viewModelType.ToString(), viewModelType));
+        }
     }
 
     protected override object GetInstance(Type service, string key)

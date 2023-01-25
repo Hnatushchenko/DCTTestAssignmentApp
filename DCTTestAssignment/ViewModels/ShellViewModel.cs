@@ -9,15 +9,21 @@ using System.Threading.Tasks;
 
 namespace DCTTestAssignment.ViewModels;
 
-public class ShellViewModel : Screen
+public class ShellViewModel : Conductor<object>
 {
-	private readonly ICoinGeckoApiClient _coinGeckoApiClient;
+    private readonly SimpleContainer _container;
 
-    public ShellViewModel(ICoinGeckoApiClient coinGeckoApiClient)
+    public ShellViewModel(SimpleContainer container)
 	{
-        _coinGeckoApiClient = coinGeckoApiClient;
-        Top10Coins = new BindableCollection<CoinsMarkets>(_coinGeckoApiClient.GetCoinsMarkets().Result.Take(10));
+        _container = container;
+        ActivateItemAsync(_container.GetInstance<HomeViewModel>()).Wait();
     }
 
-    public BindableCollection<CoinsMarkets> Top10Coins { get; set; } 
+    public async Task LoadHomePage()
+    {
+        if (ActiveItem.GetType() == typeof(HomeViewModel))
+            return;
+
+        await ActivateItemAsync(_container.GetInstance<HomeViewModel>());
+    }
 }
