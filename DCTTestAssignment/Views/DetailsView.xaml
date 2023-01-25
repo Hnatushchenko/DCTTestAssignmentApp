@@ -4,17 +4,52 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:DCTTestAssignment.Views"
+             xmlns:customConverters="clr-namespace:DCTTestAssignment.Data.CustomConverters"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    <Grid>
+    <UserControl.Resources>
+        <customConverters:StringToUppercaseConverter x:Key="StringToUppercaseConverter" />
+        <customConverters:DictionaryDecimalValuesBindingConverter x:Key="DictionaryDecimalValuesBindingConverter" />
+        <customConverters:DictionaryDoubleValuesBindingConverter x:Key="DictionaryDoubleValuesBindingConverter" />
+    </UserControl.Resources>
+    <Grid Background="#F8FAFC" >
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="auto"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="*"/>
+            <RowDefinition Height="auto"/>
         </Grid.RowDefinitions>
-        <StackPanel Orientation="Horizontal">
-            <TextBlock x:Name="CoinFullData_Id" />
+        <StackPanel Orientation="Vertical" Grid.Column="0" Grid.Row="0" Margin="40 40 0 0">
+            <StackPanel  Orientation="Horizontal" Margin="0 0 0 10" >
+                <Image Margin="0 0 20 0" Height="100" Width="100" Source="{Binding Path=CoinFullData.Image.Large}" VerticalAlignment="Center"/>
+                <TextBlock Margin="0 0 15 0" x:Name="CoinFullData_Name" VerticalAlignment="Center" FontSize="32" FontWeight="Bold"/>
+                <TextBlock Text="{Binding CoinFullData.Symbol, Converter={StaticResource StringToUppercaseConverter}}" FontSize="20" Foreground="#808A9D" Background="#EFF2F5" FontWeight="Bold" Padding="4 3" VerticalAlignment="Center"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="Price: " FontSize="20" MinWidth="120" HorizontalAlignment="Right"/>
+                <TextBlock FontSize="20" Text="$" VerticalAlignment="Center"/>
+                <TextBlock FontSize="20" Text="{Binding CoinFullData.MarketData.CurrentPrice, Converter={StaticResource DictionaryDecimalValuesBindingConverter}, ConverterParameter=usd}" VerticalAlignment="Center"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="Volume: " FontSize="20" MinWidth="120" HorizontalAlignment="Right"/>
+                <TextBlock FontSize="20" Text="$" VerticalAlignment="Center"/>
+                <TextBlock FontSize="20" Text="{Binding CoinFullData.MarketData.TotalVolume, Converter={StaticResource DictionaryDecimalValuesBindingConverter}, ConverterParameter=usd}" VerticalAlignment="Center"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="1h %: " FontSize="20" MinWidth="120" HorizontalAlignment="Right"/>
+                <TextBlock FontSize="20" Text="{Binding CoinFullData.MarketData.PriceChangePercentage1HInCurrency, Converter={StaticResource DictionaryDoubleValuesBindingConverter}, ConverterParameter=usd, StringFormat={}{0:N2}}" VerticalAlignment="Center"/>
+                <TextBlock FontSize="20" Text="%" VerticalAlignment="Center"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="1h %: " FontSize="20" MinWidth="120" HorizontalAlignment="Right"/>
+                <TextBlock FontSize="20" Text="{Binding CoinFullData.MarketData.PriceChangePercentage24HInCurrency, Converter={StaticResource DictionaryDoubleValuesBindingConverter}, ConverterParameter=usd, StringFormat={}{0:N2}}" VerticalAlignment="Center"/>
+                <TextBlock FontSize="20" Text="%" VerticalAlignment="Center"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="1h %: " FontSize="20" MinWidth="120" HorizontalAlignment="Right"/>
+                <TextBlock FontSize="20" Text="{Binding CoinFullData.MarketData.PriceChangePercentage7DInCurrency, Converter={StaticResource DictionaryDoubleValuesBindingConverter}, ConverterParameter=usd, StringFormat={}{0:N2}}" VerticalAlignment="Center"/>
+                <TextBlock FontSize="20" Text="%" VerticalAlignment="Center"/>
+            </StackPanel>
         </StackPanel>
     </Grid>
 </UserControl>

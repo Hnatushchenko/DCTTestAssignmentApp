@@ -10,7 +10,7 @@
     </Window.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="40" />
+            <ColumnDefinition Width="auto"/>
             <ColumnDefinition Width="*" />  
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
@@ -18,7 +18,7 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
-            <TextBlock FontSize="20" Text="DCT Test Assignment" Margin="0 0 30 0"/>
+            <TextBlock FontSize="20" Text="DCT Test Assignment" Margin="40 0 30 0"/>
             <Button x:Name="LoadHomePage" Content="Home" FontSize="17" Margin="0 0 30 0" Background="Transparent" BorderThickness="0" >
                 <Button.Style>
                     <Style TargetType="Button">

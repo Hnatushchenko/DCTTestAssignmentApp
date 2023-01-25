@@ -17,11 +17,6 @@ public class DetailsViewModel : Screen
     public DetailsViewModel(ICoinGeckoApiClient coinGeckoApiClient)
     {
         _coinGeckoApiClient = coinGeckoApiClient;
-        //if (string.IsNullOrEmpty(CryptocurrencyId))
-        //{
-        //    throw new Exception($"{nameof(CryptocurrencyId)} must be not null and not an empty string");
-        //}
-        //CoinFullData = _coinGeckoApiClient.GetCoinFullDataAsync(CryptocurrencyId).Result;
     }
 
     protected override async Task OnInitializeAsync(CancellationToken cancellationToken)
@@ -30,7 +25,7 @@ public class DetailsViewModel : Screen
         {
             throw new Exception($"{nameof(CryptocurrencyId)} must be not null and not an empty string");
         }
-        CoinFullData = await _coinGeckoApiClient.GetCoinFullDataAsync(CryptocurrencyId);
+        CoinFullData = await _coinGeckoApiClient.GetCoinFullDataAsync(CryptocurrencyId); //CoinFullData.MarketData.TotalVolume;
     }
 
     private CoinFullData? _coinFullData;
@@ -45,5 +40,5 @@ public class DetailsViewModel : Screen
         }
     }
 
-    public string? CryptocurrencyId { get; set; } = "bitcoin";
+    public string? CryptocurrencyId { get; set; }
 }
