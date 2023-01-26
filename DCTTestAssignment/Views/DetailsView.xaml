@@ -61,12 +61,13 @@
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
             <TextBlock Grid.Row="0" Text="Markets" FontSize="40" HorizontalAlignment="Center"/>
+            <TextBlock Grid.Row="1" Text="Sorry! No data provided." FontSize="40" HorizontalAlignment="Center" Visibility="{Binding ErrorMessageVisilibity}"/>
             <DataGrid Grid.Row="1" x:Name="CoinFullData_Tickets" Height="auto" CanUserAddRows="False" AutoGenerateColumns="False" 
                   HorizontalAlignment="Center" VerticalAlignment="Center" CanUserResizeRows="False" 
                   CanUserReorderColumns="False" CanUserResizeColumns="False" IsReadOnly="True"
-                  GridLinesVisibility="None" HeadersVisibility="Column" >
+                  GridLinesVisibility="None" HeadersVisibility="Column" Visibility="{Binding DataGridVisibility}">
                 <DataGrid.Columns>
-                    <DataGridTextColumn MinWidth="150" Header="Source" Binding="{Binding Market.Name}"  />
+                    <DataGridTextColumn MinWidth="150" Header="Source" Binding="{Binding Market.Name}"/>
                     <DataGridTemplateColumn MinWidth="90" Header="Pairs"  >
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>

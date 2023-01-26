@@ -11,9 +11,44 @@
              d:DesignHeight="450" d:DesignWidth="800">
     <UserControl.Resources>
         <customConverters:StringToUppercaseConverter x:Key="StringToUppercaseConverter" />
+        <Style x:Key="textBoxSearch" TargetType="TextBox">
+            <Setter Property="Background" Value="White" />
+            <Setter Property="Foreground" Value="Black" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="FontSize" Value="12" />
+            <Setter Property="Padding" Value="15 10" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="MinWidth" Value="300" />
+            <Setter Property="HorizontalAlignment" Value="Right" />
+            <Setter Property="Margin" Value="0 40 10 0" />
+        </Style>
     </UserControl.Resources>
-    <Grid>
-        <DataGrid x:Name="Top10Coins" Height="auto" CanUserAddRows="False" AutoGenerateColumns="False" 
+    <Grid Background="#F8FAFC">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="auto" />
+        </Grid.ColumnDefinitions>
+        <Grid HorizontalAlignment="Right" Grid.Row="0" Grid.Column="0">
+            <TextBox x:Name="SearchText" Style="{StaticResource textBoxSearch}">
+                <TextBox.Resources>
+                    <Style TargetType="Border">
+                        <Setter Property="CornerRadius" Value="20"/>
+                    </Style>
+                </TextBox.Resources>
+            </TextBox>
+        </Grid>
+        <Button x:Name="Search" Content="Search" Grid.Row="0" Grid.Column="1 " HorizontalAlignment="Right" Margin="0 40 40 0" Padding="20 10">
+            <Button.Resources>
+                <Style TargetType="Border">
+                    <Setter Property="CornerRadius" Value="20" />
+                </Style>
+            </Button.Resources>
+        </Button>
+        <DataGrid Grid.Row="1" x:Name="Top10Coins" Height="auto" CanUserAddRows="False" AutoGenerateColumns="False" 
                   HorizontalAlignment="Center" VerticalAlignment="Center" CanUserResizeRows="False" 
                   CanUserReorderColumns="False" CanUserResizeColumns="False" IsReadOnly="True"
                   GridLinesVisibility="None" HeadersVisibility="Column">
@@ -49,7 +84,7 @@
                                 </Button.Style>
                                 <i:Interaction.Triggers>
                                     <i:EventTrigger EventName="Click">
-                                        <cal:ActionMessage MethodName="OpenDetails">
+                                        <cal:ActionMessage MethodName="OpenDetailsAsync">
                                             <cal:Parameter Value="{Binding Id}" />
                                         </cal:ActionMessage>
                                     </i:EventTrigger>

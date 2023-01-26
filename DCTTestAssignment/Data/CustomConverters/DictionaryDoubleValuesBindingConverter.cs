@@ -16,7 +16,7 @@ public class DictionaryDoubleValuesBindingConverter : IValueConverter
         {
             if (parameter is string key)
             {
-                return dictionary[key];
+                return dictionary.GetValueOrDefault(key);
             }
         }
         return "not converted";

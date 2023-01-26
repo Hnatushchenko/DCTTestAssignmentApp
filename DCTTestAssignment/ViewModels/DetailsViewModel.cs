@@ -31,13 +31,25 @@ public class DetailsViewModel : Screen
             throw new Exception($"{nameof(CryptocurrencyId)} must not be null nor an empty string");
         }
 
-        CoinFullData = await _coinGeckoApiClient.GetCoinFullDataAsync(CryptocurrencyId);
+        CoinFullData = _coinGeckoApiClient.GetCoinFullDataAsync(CryptocurrencyId).Result;
+        if (CoinFullData.Tickets is null || CoinFullData.Tickets.Count() == 0)
+        {
+            DataGridVisibility = "Hidden";
+            ErrorMessageVisilibity = "Visible";
+        }
+        else
+        {
+            DataGridVisibility = "Visible";
+            ErrorMessageVisilibity = "Hidden";
+        }
         SetColors();
     }
 
     private void SetColors()
     {
-        if (CoinFullData!.MarketData.PriceChangePercentage1HInCurrency["usd"] >= 0)
+        if (CoinFullData is null) return;
+
+        if (CoinFullData.MarketData.PriceChangePercentage1HInCurrency["usd"] >= 0)
         {
             Color1h = GreenColor;
         }
@@ -83,6 +95,21 @@ public class DetailsViewModel : Screen
         get { return _color7d; }
         set { _color7d = value; NotifyOfPropertyChange(() => Color7d); }
     }
+
+    private string _dataGridVisibility;
+    public string DataGridVisibility
+    {
+        get { return _dataGridVisibility; }
+        set { _dataGridVisibility = value; NotifyOfPropertyChange(() => DataGridVisibility); }
+    }
+
+    private string _errorMessageVisilibity;
+    public string ErrorMessageVisilibity
+    {
+        get { return _errorMessageVisilibity; }
+        set { _errorMessageVisilibity = value; NotifyOfPropertyChange(() => ErrorMessageVisilibity); }
+    }
+
 
     private CoinFullData? _coinFullData;
     public CoinFullData? CoinFullData
