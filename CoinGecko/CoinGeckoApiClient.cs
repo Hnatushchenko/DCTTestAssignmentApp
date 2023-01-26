@@ -63,5 +63,24 @@ namespace CoinGecko
 
             return coinFullData;
         }
+
+        public async Task<IReadOnlyCollection<CoinsListItem>> GetCoinListAsync()
+        {
+            var response = await _httpClient.SendAsync(new HttpRequestMessage(HttpMethod.Get, ApiEndPoints.CoinsList))
+                .ConfigureAwait(false);
+
+            response.EnsureSuccessStatusCode();
+
+            var responseContent = await response.Content.ReadAsStringAsync();
+
+            var coinFullData = JsonConvert.DeserializeObject<IReadOnlyCollection<CoinsListItem>>(responseContent);
+
+            if (coinFullData is null)
+            {
+                throw new HttpRequestException("Responce is empty");
+            }
+
+            return coinFullData;
+        }
     }
 }

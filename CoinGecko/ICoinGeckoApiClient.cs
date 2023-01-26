@@ -6,5 +6,6 @@ namespace CoinGecko
     {
         Task<IReadOnlyCollection<CoinsMarkets>> GetCoinsMarketsAsync(string currency = "usd");
         Task<CoinFullData> GetCoinFullDataAsync(string id);
+        Task<IReadOnlyCollection<CoinsListItem>> GetCoinListAsync();
     }
 }

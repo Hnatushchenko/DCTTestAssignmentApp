@@ -18,8 +18,5 @@ namespace CoinGecko.Responces
 
         [JsonProperty("name")]
         public string? Name { get; set; }
-
-        [JsonProperty("platforms")]
-        public Dictionary<string, string>? Platforms { get; set; }
     }
 }
