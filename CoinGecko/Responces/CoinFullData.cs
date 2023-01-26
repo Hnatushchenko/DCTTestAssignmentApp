@@ -51,6 +51,9 @@ public class CoinFullData
 
     [JsonProperty("market_data", NullValueHandling = NullValueHandling.Ignore)]
     public MarketData MarketData { get; set; }
+
+    [JsonProperty("tickers")]
+    public List<Ticket> Tickets { get; set; }
 }
 
 public class DeveloperData
@@ -204,4 +207,35 @@ public class Image
 
     [JsonProperty("large")]
     public Uri Large { get; set; }
+}
+
+public class Ticket
+{
+    [JsonProperty("base")]
+    public string Base { get; set; }
+
+    [JsonProperty("target")]
+    public string Target { get; set; }
+
+    [JsonProperty("market")]
+    public Market Market { get; set; }
+
+    [JsonProperty("last")]
+    public double Last { get; set; }
+
+    [JsonProperty("volume")]
+    public double Volume { get; set; }
+
+    [JsonProperty("trust_score")]
+    public string TrustScore { get; set; }
+
+    [JsonProperty("trade_url")]
+    public string TradeUrl { get; set; }
+}
+
+public class Market
+{
+    [JsonProperty("name")]
+    public string Name { get; set; }
+
 }
