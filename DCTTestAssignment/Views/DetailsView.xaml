@@ -5,6 +5,8 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:DCTTestAssignment.Views"
              xmlns:customConverters="clr-namespace:DCTTestAssignment.Data.CustomConverters"
+             xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+             xmlns:cal="http://caliburnmicro.com"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <UserControl.Resources>
@@ -14,12 +16,13 @@
     </UserControl.Resources>
     <Grid Background="#F8FAFC" >
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="auto"/>
+            <ColumnDefinition Width="auto" />
+            <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="auto"/>
+            <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <StackPanel Orientation="Vertical" Grid.Column="0" Grid.Row="0" Margin="40 40 0 0">
+        <StackPanel Orientation="Vertical" Grid.Column="0" Grid.Row="0" Margin="40 40 0 0" HorizontalAlignment="Center" MaxWidth="400">
             <StackPanel  Orientation="Horizontal" Margin="0 0 0 10" >
                 <Image Margin="0 0 20 0" Height="100" Width="100" Source="{Binding Path=CoinFullData.Image.Large}" VerticalAlignment="Center"/>
                 <TextBlock Margin="0 0 15 0" x:Name="CoinFullData_Name" VerticalAlignment="Center" FontSize="32" FontWeight="Bold"/>
@@ -37,19 +40,107 @@
             </StackPanel>
             <StackPanel Orientation="Horizontal">
                 <TextBlock Text="1h %: " FontSize="20" MinWidth="120" HorizontalAlignment="Right"/>
-                <TextBlock FontSize="20" Text="{Binding CoinFullData.MarketData.PriceChangePercentage1HInCurrency, Converter={StaticResource DictionaryDoubleValuesBindingConverter}, ConverterParameter=usd, StringFormat={}{0:N2}}" VerticalAlignment="Center"/>
-                <TextBlock FontSize="20" Text="%" VerticalAlignment="Center"/>
+                <TextBlock Foreground="{Binding Color1h}" FontSize="20" Text="{Binding CoinFullData.MarketData.PriceChangePercentage1HInCurrency, Converter={StaticResource DictionaryDoubleValuesBindingConverter}, ConverterParameter=usd, StringFormat={}{0:N2}}" VerticalAlignment="Center"/>
+                <TextBlock Foreground="{Binding Color1h}" FontSize="20" Text="%" VerticalAlignment="Center"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal">
                 <TextBlock Text="24h %: " FontSize="20" MinWidth="120" HorizontalAlignment="Right"/>
-                <TextBlock FontSize="20" Text="{Binding CoinFullData.MarketData.PriceChangePercentage24HInCurrency, Converter={StaticResource DictionaryDoubleValuesBindingConverter}, ConverterParameter=usd, StringFormat={}{0:N2}}" VerticalAlignment="Center"/>
-                <TextBlock FontSize="20" Text="%" VerticalAlignment="Center"/>
+                <TextBlock Foreground="{Binding Color24h}" FontSize="20" Text="{Binding CoinFullData.MarketData.PriceChangePercentage24HInCurrency, Converter={StaticResource DictionaryDoubleValuesBindingConverter}, ConverterParameter=usd, StringFormat={}{0:N2}}" VerticalAlignment="Center"/>
+                <TextBlock Foreground="{Binding Color24h}" FontSize="20" Text="%" VerticalAlignment="Center"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal">
                 <TextBlock Text="7d %: " FontSize="20" MinWidth="120" HorizontalAlignment="Right"/>
-                <TextBlock FontSize="20" Text="{Binding CoinFullData.MarketData.PriceChangePercentage7DInCurrency, Converter={StaticResource DictionaryDoubleValuesBindingConverter}, ConverterParameter=usd, StringFormat={}{0:N2}}" VerticalAlignment="Center"/>
-                <TextBlock FontSize="20" Text="%" VerticalAlignment="Center"/>
+                <TextBlock Foreground="{Binding Color7d}" FontSize="20" Text="{Binding CoinFullData.MarketData.PriceChangePercentage7DInCurrency, Converter={StaticResource DictionaryDoubleValuesBindingConverter}, ConverterParameter=usd, StringFormat={}{0:N2}}" VerticalAlignment="Center"/>
+                <TextBlock Foreground="{Binding Color7d}" FontSize="20" Text="%" VerticalAlignment="Center"/>
             </StackPanel>
         </StackPanel>
+
+        <Grid Grid.Row="0" Grid.Column="1" Margin="50 40 0 20" HorizontalAlignment="Left">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <TextBlock Grid.Row="0" Text="Markets" FontSize="40" HorizontalAlignment="Center"/>
+            <DataGrid Grid.Row="1" x:Name="CoinFullData_Tickets" Height="auto" CanUserAddRows="False" AutoGenerateColumns="False" 
+                  HorizontalAlignment="Center" VerticalAlignment="Center" CanUserResizeRows="False" 
+                  CanUserReorderColumns="False" CanUserResizeColumns="False" IsReadOnly="True"
+                  GridLinesVisibility="None" HeadersVisibility="Column" >
+                <DataGrid.Columns>
+                    <DataGridTextColumn MinWidth="150" Header="Source" Binding="{Binding Market.Name}"  />
+                    <DataGridTemplateColumn MinWidth="90" Header="Pairs"  >
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Button Focusable="False">
+                                    <Button.Style>
+                                        <Style TargetType="Button">
+                                            <Setter Property="Template">
+                                                <Setter.Value>
+                                                    <ControlTemplate TargetType="Button">
+                                                        <ContentPresenter/>
+                                                    </ControlTemplate>
+                                                </Setter.Value>
+                                            </Setter>
+                                        </Style>
+                                    </Button.Style>
+                                    <i:Interaction.Triggers>
+                                        <i:EventTrigger EventName="Click">
+                                            <cal:ActionMessage MethodName="OpenTradeUrl">
+                                                <cal:Parameter Value="{Binding TradeUrl}" />
+                                            </cal:ActionMessage>
+                                        </i:EventTrigger>
+                                    </i:Interaction.Triggers>
+                                    <Hyperlink>
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock Text="{Binding Base, Converter={StaticResource StringToUppercaseConverter}}" />
+                                            <TextBlock Text="/"/>
+                                            <TextBlock Text="{Binding Target, Converter={StaticResource StringToUppercaseConverter}}" />
+                                        </StackPanel>
+                                    </Hyperlink>
+                                </Button>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTemplateColumn Header="Price" MinWidth="110">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="$" />
+                                    <TextBlock Text="{Binding Last, StringFormat={}{0:N2}}"  />
+                                </StackPanel>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTextColumn Header="Volume" MinWidth="100" Binding="{Binding Volume, StringFormat={}{0:N2}}"  />
+                    <DataGridTemplateColumn Header="Confidence">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="{Binding TrustScore}"  />
+                                </StackPanel>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                </DataGrid.Columns>
+                <DataGrid.RowStyle>
+                    <Style TargetType="DataGridRow">
+                        <Setter Property="Padding" Value="10 0 0 10" />
+                    </Style>
+                </DataGrid.RowStyle>
+                <DataGrid.CellStyle>
+                    <Style TargetType="DataGridCell">
+                        <Setter Property="Margin" Value="10" />
+                        <Setter Property="BorderThickness" Value="0" />
+                        <Setter Property="Foreground" Value="Black" />
+                        <Setter Property="BorderBrush" Value="Transparent" />
+                        <Style.Triggers>
+                            <Trigger Property="IsSelected" Value="True">
+                                <Setter Property="Background" Value="{x:Null}" />
+                                <Setter Property="BorderBrush" Value="{x:Null}" />
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </DataGrid.CellStyle>
+            </DataGrid>
+        </Grid>
     </Grid>
 </UserControl>

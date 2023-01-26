@@ -3,15 +3,20 @@ using CoinGecko;
 using CoinGecko.Responces;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows.Controls;
 
 namespace DCTTestAssignment.ViewModels;
 
 public class DetailsViewModel : Screen
 {
+    const string GreenColor = "#16C784";
+    const string RedColor = "#EA3943";
+
     private readonly ICoinGeckoApiClient _coinGeckoApiClient;
 
     public DetailsViewModel(ICoinGeckoApiClient coinGeckoApiClient)
@@ -23,22 +28,77 @@ public class DetailsViewModel : Screen
     {
         if (string.IsNullOrEmpty(CryptocurrencyId))
         {
-            throw new Exception($"{nameof(CryptocurrencyId)} must be not null and not an empty string");
+            throw new Exception($"{nameof(CryptocurrencyId)} must not be null nor an empty string");
         }
-        CoinFullData = await _coinGeckoApiClient.GetCoinFullDataAsync(CryptocurrencyId); //CoinFullData.MarketData.TotalVolume;
+
+        CoinFullData = await _coinGeckoApiClient.GetCoinFullDataAsync(CryptocurrencyId);
+        SetColors();
+    }
+
+    private void SetColors()
+    {
+        if (CoinFullData!.MarketData.PriceChangePercentage1HInCurrency["usd"] >= 0)
+        {
+            Color1h = GreenColor;
+        }
+        else
+        {
+            Color1h = RedColor;
+        }
+        if (CoinFullData.MarketData.PriceChangePercentage24HInCurrency["usd"] >= 0)
+        {
+            Color24h = GreenColor;
+        }
+        else
+        {
+            Color24h = RedColor;
+        }
+        if (CoinFullData.MarketData.PriceChangePercentage7DInCurrency["usd"] >= 0)
+        {
+            Color7d = GreenColor;
+        }
+        else
+        {
+            Color7d = RedColor;
+        }
+    }
+
+    private string? _color1h;
+    public string? Color1h
+    {
+        get { return _color1h; }
+        set { _color1h = value; NotifyOfPropertyChange(() => Color1h); }
+    }
+
+    private string? _color24h;
+    public string? Color24h
+    {
+        get { return _color24h; }
+        set { _color24h = value; NotifyOfPropertyChange(() => Color24h); }
+    }
+
+    private string? _color7d;
+    public string? Color7d
+    {
+        get { return _color7d; }
+        set { _color7d = value; NotifyOfPropertyChange(() => Color7d); }
     }
 
     private CoinFullData? _coinFullData;
-
     public CoinFullData? CoinFullData
     {
         get { return _coinFullData; }
-        set
-        {
-            _coinFullData = value;
-            NotifyOfPropertyChange(() => CoinFullData);
-        }
+        set { _coinFullData = value; NotifyOfPropertyChange(() => CoinFullData); }
     }
 
     public string? CryptocurrencyId { get; set; }
+
+    public void OpenTradeUrl(string url)
+    {
+        var processStartInfo = new ProcessStartInfo(url)
+        {
+            UseShellExecute = true,
+        };
+        Process.Start(processStartInfo);
+    }
 }
