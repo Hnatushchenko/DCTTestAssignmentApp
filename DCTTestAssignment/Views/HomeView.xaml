@@ -22,6 +22,15 @@
             <Setter Property="HorizontalAlignment" Value="Right" />
             <Setter Property="Margin" Value="0 40 10 0" />
         </Style>
+        <Style x:Key="DataGridNameColumn" TargetType="DataGridColumnHeader">
+            <Setter Property="Content" Value="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Path=DataContext.LocalizationData.Name}" />
+        </Style>
+        <Style x:Key="DataGridPriceColumn" TargetType="DataGridColumnHeader">
+            <Setter Property="Content" Value="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Path=DataContext.LocalizationData.Price}" />
+        </Style>
+        <Style x:Key="DataGridVolumeColumn" TargetType="DataGridColumnHeader">
+            <Setter Property="Content" Value="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Path=DataContext.LocalizationData.TotalVolume}" />
+        </Style>
     </UserControl.Resources>
     <Grid Background="#F8FAFC">
         <Grid.RowDefinitions>
@@ -41,7 +50,7 @@
                 </TextBox.Resources>
             </TextBox>
         </Grid>
-        <Button x:Name="Search" Content="Search" Grid.Row="0" Grid.Column="1 " HorizontalAlignment="Right" Margin="0 40 40 0" Padding="20 10">
+        <Button x:Name="Search" Content="{Binding LocalizationData.Search}" Grid.Row="0" Grid.Column="1 " HorizontalAlignment="Right" Margin="0 40 40 0" Padding="20 10">
             <Button.Resources>
                 <Style TargetType="Border">
                     <Setter Property="CornerRadius" Value="20" />
@@ -54,7 +63,7 @@
                   GridLinesVisibility="None" HeadersVisibility="Column">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="#" Binding="{Binding MarketCapRank}" />
-                <DataGridTemplateColumn Header="Name"  >
+                <DataGridTemplateColumn HeaderStyle="{StaticResource DataGridNameColumn}">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <Button>
@@ -98,8 +107,26 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTextColumn Header="Price" Binding="{Binding CurrentPrice, StringFormat={}{0:N2}}"  />
-                <DataGridTextColumn Header="Volume(24h)" Binding="{Binding TotalVolume}"  />
+                <DataGridTemplateColumn HeaderStyle="{StaticResource DataGridPriceColumn}">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="$" />
+                                <TextBlock Text="{Binding CurrentPrice, StringFormat={}{0:N2}}" />
+                            </StackPanel>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn HeaderStyle="{StaticResource DataGridVolumeColumn}">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="$" />
+                                <TextBlock Text="{Binding TotalVolume, StringFormat={}{0:N0}}" />
+                            </StackPanel>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
             </DataGrid.Columns>
             <DataGrid.RowStyle>
                 <Style TargetType="DataGridRow">

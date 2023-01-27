@@ -13,6 +13,21 @@
         <customConverters:StringToUppercaseConverter x:Key="StringToUppercaseConverter" />
         <customConverters:DictionaryDecimalValuesBindingConverter x:Key="DictionaryDecimalValuesBindingConverter" />
         <customConverters:DictionaryDoubleValuesBindingConverter x:Key="DictionaryDoubleValuesBindingConverter" />
+        <Style x:Key="DataGridSourceColumn" TargetType="DataGridColumnHeader">
+            <Setter Property="Content" Value="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Path=DataContext.LocalizationData.Source}" />
+        </Style>
+        <Style x:Key="DataGridPairsColumn" TargetType="DataGridColumnHeader">
+            <Setter Property="Content" Value="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Path=DataContext.LocalizationData.Pairs}" />
+        </Style>
+        <Style x:Key="DataGridPriceColumn" TargetType="DataGridColumnHeader">
+            <Setter Property="Content" Value="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Path=DataContext.LocalizationData.Price}" />
+        </Style>
+        <Style x:Key="DataGridVolumeColumn" TargetType="DataGridColumnHeader">
+            <Setter Property="Content" Value="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Path=DataContext.LocalizationData.Volume}" />
+        </Style>
+        <Style x:Key="DataGridConfidenceColumn" TargetType="DataGridColumnHeader">
+            <Setter Property="Content" Value="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Path=DataContext.LocalizationData.Confidence}" />
+        </Style>
     </UserControl.Resources>
     <Grid Background="#F8FAFC" >
         <Grid.ColumnDefinitions>
@@ -29,12 +44,14 @@
                 <TextBlock Text="{Binding CoinFullData.Symbol, Converter={StaticResource StringToUppercaseConverter}}" FontSize="20" Foreground="#808A9D" Background="#EFF2F5" FontWeight="Bold" Padding="4 3" VerticalAlignment="Center"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal">
-                <TextBlock Text="Price: " FontSize="20" MinWidth="120" HorizontalAlignment="Right"/>
+                <TextBlock Text="{Binding LocalizationData.Price}" FontSize="20"/>
+                <TextBlock Text=": " MinWidth="80" FontSize="20" />
                 <TextBlock FontSize="20" Text="$" VerticalAlignment="Center"/>
                 <TextBlock FontSize="20" Text="{Binding CoinFullData.MarketData.CurrentPrice, Converter={StaticResource DictionaryDecimalValuesBindingConverter}, ConverterParameter=usd}" VerticalAlignment="Center"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal">
-                <TextBlock Text="Volume: " FontSize="20" MinWidth="120" HorizontalAlignment="Right"/>
+                <TextBlock Text="{Binding LocalizationData.Volume}" FontSize="20" HorizontalAlignment="Right"/>
+                <TextBlock Text=": " FontSize="20" MinWidth="60" HorizontalAlignment="Right"/>
                 <TextBlock FontSize="20" Text="$" VerticalAlignment="Center"/>
                 <TextBlock FontSize="20" Text="{Binding CoinFullData.MarketData.TotalVolume, Converter={StaticResource DictionaryDecimalValuesBindingConverter}, ConverterParameter=usd}" VerticalAlignment="Center"/>
             </StackPanel>
@@ -60,15 +77,15 @@
                 <RowDefinition Height="auto"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
-            <TextBlock Grid.Row="0" Text="Markets" FontSize="40" HorizontalAlignment="Center"/>
+            <TextBlock Grid.Row="0" Text="{Binding LocalizationData.Markets}" FontSize="40" HorizontalAlignment="Center"/>
             <TextBlock Grid.Row="1" Text="Sorry! No data provided." FontSize="40" HorizontalAlignment="Center" Visibility="{Binding ErrorMessageVisilibity}"/>
             <DataGrid Grid.Row="1" x:Name="CoinFullData_Tickets" Height="auto" CanUserAddRows="False" AutoGenerateColumns="False" 
                   HorizontalAlignment="Center" VerticalAlignment="Center" CanUserResizeRows="False" 
                   CanUserReorderColumns="False" CanUserResizeColumns="False" IsReadOnly="True"
                   GridLinesVisibility="None" HeadersVisibility="Column" Visibility="{Binding DataGridVisibility}">
                 <DataGrid.Columns>
-                    <DataGridTextColumn MinWidth="150" Header="Source" Binding="{Binding Market.Name}"/>
-                    <DataGridTemplateColumn MinWidth="90" Header="Pairs"  >
+                    <DataGridTextColumn MinWidth="150" HeaderStyle="{StaticResource DataGridSourceColumn}" Binding="{Binding Market.Name}"/>
+                    <DataGridTemplateColumn MinWidth="90" HeaderStyle="{StaticResource DataGridPairsColumn}"  >
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <Button Focusable="False">
@@ -101,7 +118,7 @@
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
-                    <DataGridTemplateColumn Header="Price" MinWidth="110">
+                    <DataGridTemplateColumn HeaderStyle="{StaticResource DataGridPriceColumn}" MinWidth="110">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <StackPanel Orientation="Horizontal">
@@ -111,8 +128,8 @@
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
-                    <DataGridTextColumn Header="Volume" MinWidth="100" Binding="{Binding Volume, StringFormat={}{0:N2}}"  />
-                    <DataGridTemplateColumn Header="Confidence">
+                    <DataGridTextColumn HeaderStyle="{StaticResource DataGridVolumeColumn}" MinWidth="100" Binding="{Binding Volume, StringFormat={}{0:N2}}"  />
+                    <DataGridTemplateColumn HeaderStyle="{StaticResource DataGridConfidenceColumn}">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <StackPanel Orientation="Horizontal">

@@ -1,6 +1,9 @@
 ﻿using Caliburn.Micro;
 using CoinGecko;
 using CoinGecko.Responces;
+using DCTTestAssignment.Data;
+using DCTTestAssignment.Data.LocalizationData.HomeLocalizationData;
+using DCTTestAssignment.Data.LocalizationData.ShellViewLocalizationData;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -17,13 +20,21 @@ namespace DCTTestAssignment.ViewModels
     {
         private readonly ICoinGeckoApiClient _coinGeckoApiClient;
         private readonly SimpleContainer _container;
-        private readonly ShellViewModel _shellViewModel;
+        private readonly ILocalizationDataProvider<IHomeViewLocalizationData> _localizationDataProvider;
 
-        public HomeViewModel(ICoinGeckoApiClient coinGeckoApiClient, ShellViewModel shellViewModel, SimpleContainer container)
+        private IHomeViewLocalizationData? _localizationData;
+        public IHomeViewLocalizationData? LocalizationData
+        {
+            get { return _localizationData; }
+            set { _localizationData = value; NotifyOfPropertyChange(() => LocalizationData); }
+        }
+
+        public HomeViewModel(ICoinGeckoApiClient coinGeckoApiClient, SimpleContainer container, IEventAggregator eventAggregator, ILocalizationDataProvider<IHomeViewLocalizationData> localizationDataProvider)
         {
             _coinGeckoApiClient = coinGeckoApiClient;
-            _shellViewModel = shellViewModel;
             _container = container;
+            eventAggregator.SubscribeOnUIThread(this);
+            _localizationDataProvider = localizationDataProvider;
         }
 
         protected override async Task OnInitializeAsync(CancellationToken cancellationToken)
@@ -39,7 +50,7 @@ namespace DCTTestAssignment.ViewModels
             set { _top10Coins = value; NotifyOfPropertyChange(() => Top10Coins); }
         }
 
-        private string _searchText;
+        private string _searchText = "";
         public string SearchText
         {
             get { return _searchText; }
@@ -48,9 +59,13 @@ namespace DCTTestAssignment.ViewModels
 
         public async Task OpenDetailsAsync(string id)
         {
-            var detailsVM = _container.GetInstance<DetailsViewModel>();
-            detailsVM.CryptocurrencyId = id;
-            await _shellViewModel.ActivateItemAsync(detailsVM);
+            var shellViewModel = _container.GetInstance<ShellViewModel>();
+            await shellViewModel.OpenDetailsViewAsync(id);
+        }
+
+        public void UpdateLanguage(string language)
+        {
+            LocalizationData = _localizationDataProvider.GetLocalizationData(language);
         }
 
         public async Task Search()

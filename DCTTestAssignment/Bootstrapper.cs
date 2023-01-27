@@ -1,5 +1,9 @@
 ﻿using Caliburn.Micro;
 using CoinGecko;
+using DCTTestAssignment.Data;
+using DCTTestAssignment.Data.LocalizationData.DetailsViewLocalizationData;
+using DCTTestAssignment.Data.LocalizationData.HomeLocalizationData;
+using DCTTestAssignment.Data.LocalizationData.ShellViewLocalizationData;
 using DCTTestAssignment.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -31,9 +35,12 @@ public class Bootstrapper : BootstrapperBase
         _container.Singleton<IWindowManager, WindowManager>();
         _container.Singleton<IEventAggregator, EventAggregator>();
         _container.Singleton<ICoinGeckoApiClient, CoinGeckoApiClient>();
+        _container.Singleton<ILocalizationDataProvider<IShellViewLocalizationData>, LocalizationDataProvider<IShellViewLocalizationData>>();
+        _container.Singleton<ILocalizationDataProvider<IHomeViewLocalizationData>, LocalizationDataProvider<IHomeViewLocalizationData>>();
+        _container.Singleton<ILocalizationDataProvider<IDetailsViewLocalizationData>, LocalizationDataProvider<IDetailsViewLocalizationData>>();
         _container.Singleton<ShellViewModel>();
-        _container.PerRequest<DetailsViewModel>();
-        _container.PerRequest<HomeViewModel>();
+        _container.Singleton<DetailsViewModel>();
+        _container.Singleton<HomeViewModel>();
     }
 
     protected override object GetInstance(Type service, string key)

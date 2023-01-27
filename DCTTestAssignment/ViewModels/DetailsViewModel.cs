@@ -1,6 +1,9 @@
 ﻿using Caliburn.Micro;
 using CoinGecko;
 using CoinGecko.Responces;
+using DCTTestAssignment.Data;
+using DCTTestAssignment.Data.LocalizationData.DetailsViewLocalizationData;
+using DCTTestAssignment.Data.LocalizationData.HomeLocalizationData;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -18,20 +21,29 @@ public class DetailsViewModel : Screen
     const string RedColor = "#EA3943";
 
     private readonly ICoinGeckoApiClient _coinGeckoApiClient;
+    private readonly ILocalizationDataProvider<IDetailsViewLocalizationData> _localizationDataProvider;
 
-    public DetailsViewModel(ICoinGeckoApiClient coinGeckoApiClient)
+    private IDetailsViewLocalizationData? _localizationData;
+    public IDetailsViewLocalizationData? LocalizationData
     {
-        _coinGeckoApiClient = coinGeckoApiClient;
+        get { return _localizationData; }
+        set { _localizationData = value; NotifyOfPropertyChange(() => LocalizationData ); }
     }
 
-    protected override async Task OnInitializeAsync(CancellationToken cancellationToken)
+    public DetailsViewModel(ICoinGeckoApiClient coinGeckoApiClient, ILocalizationDataProvider<IDetailsViewLocalizationData> localizationDataProvider)
+    {
+        _coinGeckoApiClient = coinGeckoApiClient;
+        _localizationDataProvider = localizationDataProvider;
+    }
+
+    public async Task LoadDataAsync()
     {
         if (string.IsNullOrEmpty(CryptocurrencyId))
         {
             throw new Exception($"{nameof(CryptocurrencyId)} must not be null nor an empty string");
         }
 
-        CoinFullData = _coinGeckoApiClient.GetCoinFullDataAsync(CryptocurrencyId).Result;
+        CoinFullData = await _coinGeckoApiClient.GetCoinFullDataAsync(CryptocurrencyId);
         if (CoinFullData.Tickets is null || CoinFullData.Tickets.Count() == 0)
         {
             DataGridVisibility = "Hidden";
@@ -96,20 +108,19 @@ public class DetailsViewModel : Screen
         set { _color7d = value; NotifyOfPropertyChange(() => Color7d); }
     }
 
-    private string _dataGridVisibility;
-    public string DataGridVisibility
+    private string? _dataGridVisibility;
+    public string? DataGridVisibility
     {
         get { return _dataGridVisibility; }
         set { _dataGridVisibility = value; NotifyOfPropertyChange(() => DataGridVisibility); }
     }
 
-    private string _errorMessageVisilibity;
-    public string ErrorMessageVisilibity
+    private string? _errorMessageVisilibity;
+    public string? ErrorMessageVisilibity
     {
         get { return _errorMessageVisilibity; }
         set { _errorMessageVisilibity = value; NotifyOfPropertyChange(() => ErrorMessageVisilibity); }
     }
-
 
     private CoinFullData? _coinFullData;
     public CoinFullData? CoinFullData
@@ -127,5 +138,10 @@ public class DetailsViewModel : Screen
             UseShellExecute = true,
         };
         Process.Start(processStartInfo);
+    }
+
+    public void UpdateLanguage(string language)
+    {
+        LocalizationData = _localizationDataProvider.GetLocalizationData(language);
     }
 }
