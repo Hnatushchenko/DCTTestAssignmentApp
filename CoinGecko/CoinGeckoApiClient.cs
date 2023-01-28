@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Json;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web;
@@ -81,6 +82,29 @@ namespace CoinGecko
             }
 
             return coinFullData;
+        }
+
+        public async Task<decimal?> GetCoinPriceInUSDByNameOrSymbol(string identifier)
+        {
+            var coinList = await GetCoinListAsync();
+            var coin = coinList.FirstOrDefault(coin =>
+                coin.Name?.ToLower() == identifier.ToLower());
+
+            if (coin is null)
+            {
+                coin = coinList.FirstOrDefault(coin =>
+                coin.Symbol?.ToLower() == identifier.ToLower());
+            }
+
+            if (coin is not null && coin.Id is not null)
+            {
+                var coinFullData = await GetCoinFullDataAsync(coin.Id);
+                decimal price = coinFullData.MarketData.CurrentPrice["usd"] 
+                    ?? throw new HttpRequestException("Price was not provided by the CoinGecko API");
+                
+                return price;
+            }
+            return null;
         }
     }
 }

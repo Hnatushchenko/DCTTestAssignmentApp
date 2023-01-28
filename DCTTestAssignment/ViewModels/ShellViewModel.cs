@@ -21,6 +21,7 @@ public class ShellViewModel : Conductor<object>
 {
     private readonly HomeViewModel _homeViewModel;
     private readonly DetailsViewModel _detailsViewModel;
+    private readonly ConvertViewModel _convertViewModel;
     private readonly IThemeDataProvider _themeDataProvider;
     private readonly ILocalizationDataProvider<IShellViewLocalizationData> _localizationDataProvider;
 
@@ -38,12 +39,13 @@ public class ShellViewModel : Conductor<object>
         set { _themeData = value; NotifyOfPropertyChange(() => ThemeData); }
     }
 
-    public ShellViewModel(ILocalizationDataProvider<IShellViewLocalizationData> localizationDataProvider, HomeViewModel homeViewModel, DetailsViewModel detailsViewModel, IThemeDataProvider themeDataProvider)
+    public ShellViewModel(ILocalizationDataProvider<IShellViewLocalizationData> localizationDataProvider, HomeViewModel homeViewModel, DetailsViewModel detailsViewModel, IThemeDataProvider themeDataProvider, ConvertViewModel convertViewModel)
     {
         _localizationDataProvider = localizationDataProvider;
         _homeViewModel = homeViewModel;
         _detailsViewModel = detailsViewModel;
         _themeDataProvider = themeDataProvider;
+        _convertViewModel = convertViewModel;
         SelectedLanguage = "English";
         SelectedTheme = "Light";
     }
@@ -77,6 +79,7 @@ public class ShellViewModel : Conductor<object>
         LocalizationData = _localizationDataProvider.GetLocalizationData(SelectedLanguage);
         _homeViewModel.UpdateLanguage(SelectedLanguage);
         _detailsViewModel.UpdateLanguage(SelectedLanguage);
+        _convertViewModel.UpdateLanguage(SelectedLanguage);
     }
 
     private void ChangeApplicationTheme()
@@ -84,6 +87,7 @@ public class ShellViewModel : Conductor<object>
         ThemeData = _themeDataProvider.GetThemeData(SelectedTheme);
         _homeViewModel.ThemeData = ThemeData;
         _detailsViewModel.ThemeData = ThemeData;
+        _convertViewModel.ThemeData = ThemeData;
     }
 
     protected override async Task OnInitializeAsync(CancellationToken cancellationToken)
@@ -104,5 +108,13 @@ public class ShellViewModel : Conductor<object>
         _detailsViewModel.CryptocurrencyId = cryptocurrencyId;
         await _detailsViewModel.LoadDataAsync();
         await ActivateItemAsync(_detailsViewModel);
+    }
+
+    public async Task LoadConverterPageAsync()
+    {
+        if (ActiveItem?.GetType() == typeof(ConvertViewModel))
+            return;
+
+        await ActivateItemAsync(_convertViewModel);
     }
 }

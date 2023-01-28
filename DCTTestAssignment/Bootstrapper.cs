@@ -1,6 +1,7 @@
 ﻿using Caliburn.Micro;
 using CoinGecko;
 using DCTTestAssignment.Data;
+using DCTTestAssignment.Data.LocalizationData.ConvertViewLocalizationData;
 using DCTTestAssignment.Data.LocalizationData.DetailsViewLocalizationData;
 using DCTTestAssignment.Data.LocalizationData.HomeLocalizationData;
 using DCTTestAssignment.Data.LocalizationData.ShellViewLocalizationData;
@@ -40,9 +41,11 @@ public class Bootstrapper : BootstrapperBase
         _container.Singleton<ILocalizationDataProvider<IShellViewLocalizationData>, LocalizationDataProvider<IShellViewLocalizationData>>();
         _container.Singleton<ILocalizationDataProvider<IHomeViewLocalizationData>, LocalizationDataProvider<IHomeViewLocalizationData>>();
         _container.Singleton<ILocalizationDataProvider<IDetailsViewLocalizationData>, LocalizationDataProvider<IDetailsViewLocalizationData>>();
+        _container.Singleton<ILocalizationDataProvider<IConvertViewLocalizationData>, LocalizationDataProvider<IConvertViewLocalizationData>>();
         _container.Singleton<ShellViewModel>();
         _container.Singleton<DetailsViewModel>();
         _container.Singleton<HomeViewModel>();
+        _container.Singleton<ConvertViewModel>();
     }
 
     protected override object GetInstance(Type service, string key)
