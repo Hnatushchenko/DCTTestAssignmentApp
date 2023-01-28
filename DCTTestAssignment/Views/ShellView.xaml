@@ -64,12 +64,14 @@
                 </Button>
             </StackPanel>
             <StackPanel Orientation="Horizontal" Margin="0 0 20 0" DockPanel.Dock="Right">
-                <TextBlock FontSize="20" Text="Theme: " VerticalAlignment="Center" />
+                <TextBlock FontSize="20" Text="{Binding LocalizationData.Theme}" VerticalAlignment="Center" />
+                <TextBlock FontSize="20" Text=":" VerticalAlignment="Center" />
                 <ComboBox Height="23" SelectedValuePath="Content" SelectedValue="{Binding SelectedTheme}" Margin="0 0 20 0">
                     <ComboBoxItem IsSelected="True" Tag="Light" Content="Light" />
                     <ComboBoxItem Tag="Dark" Content="Dark" />
                 </ComboBox>
-                <TextBlock FontSize="20" Text="Language: "  VerticalAlignment="Center"/>
+                <TextBlock FontSize="20" Text="{Binding LocalizationData.Language}"  VerticalAlignment="Center"/>
+                <TextBlock FontSize="20" Text=": "  VerticalAlignment="Center"/>
                 <ComboBox Height="23" SelectedValuePath="Content" SelectedValue="{Binding SelectedLanguage}">
                     <ComboBoxItem IsSelected="True" Tag="English" Content="English"/>
                     <ComboBoxItem Tag="Ukrainian" Content="Ukrainian" />

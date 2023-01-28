@@ -11,4 +11,6 @@ public interface IShellViewLocalizationData
     public string? DCTTestAssignment { get; }
     public string? Home { get; }
     public string? Converter { get; }
+    public string? Theme { get; }
+    public string? Language { get; }
 }

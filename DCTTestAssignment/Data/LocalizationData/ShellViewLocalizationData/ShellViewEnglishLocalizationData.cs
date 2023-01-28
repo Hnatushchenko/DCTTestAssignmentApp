@@ -11,4 +11,6 @@ public class ShellViewEnglishLocalizationData : IShellViewLocalizationData
     public string? DCTTestAssignment => "DCT Test Assignment";
     public string? Home => "Home";
     public string? Converter => "Converter";
+    public string? Theme => "Theme";
+    public string? Language => "Language";
 }
