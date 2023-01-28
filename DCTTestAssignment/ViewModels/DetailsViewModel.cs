@@ -4,6 +4,7 @@ using CoinGecko.Responces;
 using DCTTestAssignment.Data;
 using DCTTestAssignment.Data.LocalizationData.DetailsViewLocalizationData;
 using DCTTestAssignment.Data.LocalizationData.HomeLocalizationData;
+using DCTTestAssignment.Data.ThemeSupport.ThemeData;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -86,6 +87,14 @@ public class DetailsViewModel : Screen
             Color7d = RedColor;
         }
     }
+
+    private IThemeData _themeData;
+    public IThemeData ThemeData
+    {
+        get { return _themeData; }
+        set { _themeData = value; NotifyOfPropertyChange(() => ThemeData); }
+    }
+
 
     private string? _color1h;
     public string? Color1h

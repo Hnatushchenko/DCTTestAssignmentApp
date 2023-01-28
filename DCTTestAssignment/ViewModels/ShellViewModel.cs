@@ -5,12 +5,15 @@ using DCTTestAssignment.Data;
 using DCTTestAssignment.Data.LocalizationData.DetailsViewLocalizationData;
 using DCTTestAssignment.Data.LocalizationData.HomeLocalizationData;
 using DCTTestAssignment.Data.LocalizationData.ShellViewLocalizationData;
+using DCTTestAssignment.Data.ThemeSupport;
+using DCTTestAssignment.Data.ThemeSupport.ThemeData;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows.Diagnostics;
 
 namespace DCTTestAssignment.ViewModels;
 
@@ -18,6 +21,7 @@ public class ShellViewModel : Conductor<object>
 {
     private readonly HomeViewModel _homeViewModel;
     private readonly DetailsViewModel _detailsViewModel;
+    private readonly IThemeDataProvider _themeDataProvider;
     private readonly ILocalizationDataProvider<IShellViewLocalizationData> _localizationDataProvider;
 
     private IShellViewLocalizationData _localizationData = null!;
@@ -27,12 +31,21 @@ public class ShellViewModel : Conductor<object>
         set { _localizationData = value; NotifyOfPropertyChange(() => LocalizationData); }
     }
 
-    public ShellViewModel(ILocalizationDataProvider<IShellViewLocalizationData> localizationDataProvider, HomeViewModel homeViewModel, DetailsViewModel detailsViewModel)
+    private IThemeData? _themeData;
+    public IThemeData? ThemeData
+    {
+        get { return _themeData; }
+        set { _themeData = value; NotifyOfPropertyChange(() => ThemeData); }
+    }
+
+    public ShellViewModel(ILocalizationDataProvider<IShellViewLocalizationData> localizationDataProvider, HomeViewModel homeViewModel, DetailsViewModel detailsViewModel, IThemeDataProvider themeDataProvider)
     {
         _localizationDataProvider = localizationDataProvider;
         _homeViewModel = homeViewModel;
         _detailsViewModel = detailsViewModel;
+        _themeDataProvider = themeDataProvider;
         SelectedLanguage = "English";
+        SelectedTheme = "Light";
     }
 
     private string _selectedLanguage = null!;
@@ -47,11 +60,30 @@ public class ShellViewModel : Conductor<object>
         }
     }
 
+    private string _selectedTheme = null!;
+    public string SelectedTheme
+    {
+        get { return _selectedTheme; }
+        set
+        {
+            _selectedTheme = value;
+            NotifyOfPropertyChange(() => SelectedTheme);
+            ChangeApplicationTheme();
+        }
+    }
+
     private void ChangeApplicationLanguage()
     {
         LocalizationData = _localizationDataProvider.GetLocalizationData(SelectedLanguage);
         _homeViewModel.UpdateLanguage(SelectedLanguage);
         _detailsViewModel.UpdateLanguage(SelectedLanguage);
+    }
+
+    private void ChangeApplicationTheme()
+    {
+        ThemeData = _themeDataProvider.GetThemeData(SelectedTheme);
+        _homeViewModel.ThemeData = ThemeData;
+        _detailsViewModel.ThemeData = ThemeData;
     }
 
     protected override async Task OnInitializeAsync(CancellationToken cancellationToken)

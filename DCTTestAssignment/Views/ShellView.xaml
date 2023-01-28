@@ -6,7 +6,8 @@
         xmlns:local="clr-namespace:DCTTestAssignment.Views"
         mc:Ignorable="d"
         Title="{Binding LocalizationData.DCTTestAssignment}" Height="450" Width="800"
-        WindowStartupLocation="CenterScreen" >
+        WindowStartupLocation="CenterScreen" 
+        Foreground="{Binding ThemeData.Foreground}">
     <Window.Resources>
     </Window.Resources>
     <Grid>
@@ -18,10 +19,10 @@
             <RowDefinition Height="80" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-        <DockPanel Grid.Row="0" Grid.Column="1" LastChildFill="False">
+        <DockPanel Grid.Row="0" Grid.Column="1" LastChildFill="False" Background="{Binding ThemeData.NavigationBarBackground}">
             <StackPanel  Orientation="Horizontal" VerticalAlignment="Center">
                 <TextBlock FontSize="20" Text="{Binding LocalizationData.DCTTestAssignment}" Margin="40 0 30 0"/>
-                <Button x:Name="LoadHomePage" Content="{Binding LocalizationData.Home}" FontSize="17" Margin="0 0 30 0" Background="Transparent" BorderThickness="0" >
+                <Button Foreground="{Binding ThemeData.Foreground}" x:Name="LoadHomePage" Content="{Binding LocalizationData.Home}" FontSize="17" Margin="0 0 30 0" Background="Transparent" BorderThickness="0" >
                     <Button.Style>
                         <Style TargetType="Button">
                             <Setter Property="Template">
@@ -41,7 +42,7 @@
                         </Style>
                     </Button.Style>
                 </Button>
-                <Button x:Name="LoadConverterPage" Content="{Binding LocalizationData.Converter}" FontSize="17" Background="Transparent" BorderThickness="0">
+                <Button Foreground="{Binding ThemeData.Foreground}" x:Name="LoadConverterPage" Content="{Binding LocalizationData.Converter}" FontSize="17" Background="Transparent" BorderThickness="0">
                     <Button.Style>
                         <Style TargetType="Button">
                             <Setter Property="Template">
@@ -63,14 +64,19 @@
                 </Button>
             </StackPanel>
             <StackPanel Orientation="Horizontal" Margin="0 0 20 0" DockPanel.Dock="Right">
+                <TextBlock FontSize="20" Text="Theme: " VerticalAlignment="Center" />
+                <ComboBox Height="23" SelectedValuePath="Content" SelectedValue="{Binding SelectedTheme}" Margin="0 0 20 0">
+                    <ComboBoxItem IsSelected="True" Tag="Light" Content="Light" />
+                    <ComboBoxItem Tag="Dark" Content="Dark" />
+                </ComboBox>
                 <TextBlock FontSize="20" Text="Language: "  VerticalAlignment="Center"/>
                 <ComboBox Height="23" SelectedValuePath="Content" SelectedValue="{Binding SelectedLanguage}">
-                    <ComboBoxItem IsSelected="True" Tag="English" Content="English" />
+                    <ComboBoxItem IsSelected="True" Tag="English" Content="English"/>
                     <ComboBoxItem Tag="Ukrainian" Content="Ukrainian" />
                 </ComboBox>
             </StackPanel>
         </DockPanel>
-        <ContentControl x:Name="ActiveItem" Grid.Row="1" Grid.Column="1">
+        <ContentControl x:Name="ActiveItem" Grid.Row="1" Grid.Column="1" >
 
         </ContentControl>
     </Grid>

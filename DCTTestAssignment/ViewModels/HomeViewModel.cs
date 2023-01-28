@@ -4,6 +4,7 @@ using CoinGecko.Responces;
 using DCTTestAssignment.Data;
 using DCTTestAssignment.Data.LocalizationData.HomeLocalizationData;
 using DCTTestAssignment.Data.LocalizationData.ShellViewLocalizationData;
+using DCTTestAssignment.Data.ThemeSupport.ThemeData;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -27,6 +28,13 @@ namespace DCTTestAssignment.ViewModels
         {
             get { return _localizationData; }
             set { _localizationData = value; NotifyOfPropertyChange(() => LocalizationData); }
+        }
+
+        private IThemeData? _themeData;
+        public IThemeData? ThemeData
+        {
+            get { return _themeData; }
+            set { _themeData = value; NotifyOfPropertyChange(() => ThemeData); }
         }
 
         public HomeViewModel(ICoinGeckoApiClient coinGeckoApiClient, SimpleContainer container, IEventAggregator eventAggregator, ILocalizationDataProvider<IHomeViewLocalizationData> localizationDataProvider)

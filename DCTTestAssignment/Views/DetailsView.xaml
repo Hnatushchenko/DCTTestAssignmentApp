@@ -14,22 +14,27 @@
         <customConverters:DictionaryDecimalValuesBindingConverter x:Key="DictionaryDecimalValuesBindingConverter" />
         <customConverters:DictionaryDoubleValuesBindingConverter x:Key="DictionaryDoubleValuesBindingConverter" />
         <Style x:Key="DataGridSourceColumn" TargetType="DataGridColumnHeader">
+            <Setter Property="Background" Value="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Path=DataContext.ThemeData.NavigationBarBackground}"/>
             <Setter Property="Content" Value="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Path=DataContext.LocalizationData.Source}" />
         </Style>
         <Style x:Key="DataGridPairsColumn" TargetType="DataGridColumnHeader">
+            <Setter Property="Background" Value="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Path=DataContext.ThemeData.NavigationBarBackground}"/>
             <Setter Property="Content" Value="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Path=DataContext.LocalizationData.Pairs}" />
         </Style>
         <Style x:Key="DataGridPriceColumn" TargetType="DataGridColumnHeader">
+            <Setter Property="Background" Value="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Path=DataContext.ThemeData.NavigationBarBackground}"/>
             <Setter Property="Content" Value="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Path=DataContext.LocalizationData.Price}" />
         </Style>
         <Style x:Key="DataGridVolumeColumn" TargetType="DataGridColumnHeader">
+            <Setter Property="Background" Value="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Path=DataContext.ThemeData.NavigationBarBackground}"/>
             <Setter Property="Content" Value="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Path=DataContext.LocalizationData.Volume}" />
         </Style>
         <Style x:Key="DataGridConfidenceColumn" TargetType="DataGridColumnHeader">
+            <Setter Property="Background" Value="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Path=DataContext.ThemeData.NavigationBarBackground}"/>
             <Setter Property="Content" Value="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Path=DataContext.LocalizationData.Confidence}" />
         </Style>
     </UserControl.Resources>
-    <Grid Background="#F8FAFC" >
+    <Grid Background="{Binding ThemeData.MainContentBackground}" >
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="auto" />
             <ColumnDefinition Width="*" />
@@ -41,7 +46,7 @@
             <StackPanel  Orientation="Horizontal" Margin="0 0 0 10" >
                 <Image Margin="0 0 20 0" Height="100" Width="100" Source="{Binding Path=CoinFullData.Image.Large}" VerticalAlignment="Center"/>
                 <TextBlock Margin="0 0 15 0" x:Name="CoinFullData_Name" VerticalAlignment="Center" FontSize="32" FontWeight="Bold"/>
-                <TextBlock Text="{Binding CoinFullData.Symbol, Converter={StaticResource StringToUppercaseConverter}}" FontSize="20" Foreground="#808A9D" Background="#EFF2F5" FontWeight="Bold" Padding="4 3" VerticalAlignment="Center"/>
+                <TextBlock Text="{Binding CoinFullData.Symbol, Converter={StaticResource StringToUppercaseConverter}}" FontSize="20" Foreground="#808A9D" FontWeight="Bold" VerticalAlignment="Center"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal">
                 <TextBlock Text="{Binding LocalizationData.Price}" FontSize="20"/>
@@ -79,18 +84,24 @@
             </Grid.RowDefinitions>
             <TextBlock Grid.Row="0" Text="{Binding LocalizationData.Markets}" FontSize="40" HorizontalAlignment="Center"/>
             <TextBlock Grid.Row="1" Text="Sorry! No data provided." FontSize="40" HorizontalAlignment="Center" Visibility="{Binding ErrorMessageVisilibity}"/>
-            <DataGrid Grid.Row="1" x:Name="CoinFullData_Tickets" Height="auto" CanUserAddRows="False" AutoGenerateColumns="False" 
-                  HorizontalAlignment="Center" VerticalAlignment="Center" CanUserResizeRows="False" 
-                  CanUserReorderColumns="False" CanUserResizeColumns="False" IsReadOnly="True"
+            <DataGrid RowBackground="{Binding ThemeData.NavigationBarBackground}" Grid.Row="1" x:Name="CoinFullData_Tickets" Height="auto" CanUserAddRows="False" AutoGenerateColumns="False" 
+                  HorizontalAlignment="Center" VerticalAlignment="Center" CanUserResizeRows="False" Background="{Binding ThemeData.NavigationBarBackground}"
+                  CanUserReorderColumns="False" CanUserResizeColumns="False" IsReadOnly="True" Foreground="{Binding ThemeData.Foreground}"
                   GridLinesVisibility="None" HeadersVisibility="Column" Visibility="{Binding DataGridVisibility}">
+                <DataGrid.Resources>
+                    <Style x:Key="textStyle" TargetType="TextBlock">
+                        <Setter Property="Foreground" Value ="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Path=DataContext.ThemeData.Foreground}" />
+                    </Style>
+                </DataGrid.Resources>
                 <DataGrid.Columns>
-                    <DataGridTextColumn MinWidth="150" HeaderStyle="{StaticResource DataGridSourceColumn}" Binding="{Binding Market.Name}"/>
+                    <DataGridTextColumn MinWidth="150" HeaderStyle="{StaticResource DataGridSourceColumn}" Binding="{Binding Market.Name}" ElementStyle="{StaticResource textStyle}" />
                     <DataGridTemplateColumn MinWidth="90" HeaderStyle="{StaticResource DataGridPairsColumn}"  >
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <Button Focusable="False">
                                     <Button.Style>
                                         <Style TargetType="Button">
+                                            <Setter Property="Foreground" Value ="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Path=DataContext.ThemeData.Foreground}" />
                                             <Setter Property="Template">
                                                 <Setter.Value>
                                                     <ControlTemplate TargetType="Button">
@@ -122,18 +133,18 @@
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <StackPanel Orientation="Horizontal">
-                                    <TextBlock Text="$" />
-                                    <TextBlock Text="{Binding Last, StringFormat={}{0:N2}}"  />
+                                    <TextBlock Text="$" Style="{StaticResource textStyle}"/>
+                                    <TextBlock Text="{Binding Last, StringFormat={}{0:N2}}" Style="{StaticResource textStyle}" />
                                 </StackPanel>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
-                    <DataGridTextColumn HeaderStyle="{StaticResource DataGridVolumeColumn}" MinWidth="100" Binding="{Binding Volume, StringFormat={}{0:N2}}"  />
+                    <DataGridTextColumn HeaderStyle="{StaticResource DataGridVolumeColumn}" MinWidth="100" Binding="{Binding Volume, StringFormat={}{0:N2}}" ElementStyle="{StaticResource textStyle}" />
                     <DataGridTemplateColumn HeaderStyle="{StaticResource DataGridConfidenceColumn}">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <StackPanel Orientation="Horizontal">
-                                    <TextBlock Text="{Binding TrustScore}"  />
+                                    <TextBlock Text="{Binding TrustScore}" Style="{StaticResource textStyle}" />
                                 </StackPanel>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>

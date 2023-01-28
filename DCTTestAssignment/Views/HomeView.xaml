@@ -12,9 +12,10 @@
     <UserControl.Resources>
         <customConverters:StringToUppercaseConverter x:Key="StringToUppercaseConverter" />
         <Style x:Key="textBoxSearch" TargetType="TextBox">
-            <Setter Property="Background" Value="White" />
-            <Setter Property="Foreground" Value="Black" />
-            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="Background" Value="{Binding ThemeData.NavigationBarBackground}" />
+            <Setter Property="Foreground" Value="{Binding ThemeData.Foreground}" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="BorderBrush" Value="{Binding ThemeData.BorderBrush}" />
             <Setter Property="FontSize" Value="12" />
             <Setter Property="Padding" Value="15 10" />
             <Setter Property="VerticalAlignment" Value="Center" />
@@ -22,17 +23,24 @@
             <Setter Property="HorizontalAlignment" Value="Right" />
             <Setter Property="Margin" Value="0 40 10 0" />
         </Style>
-        <Style x:Key="DataGridNameColumn" TargetType="DataGridColumnHeader">
+        <Style BasedOn="{StaticResource {x:Type DataGridColumnHeader}}" x:Key="DataGridRankColumn" TargetType="DataGridColumnHeader">
+            <Setter Property="Background" Value="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Path=DataContext.ThemeData.NavigationBarBackground}"/>
+            <Setter Property="Content" Value="#" />
+        </Style>
+        <Style BasedOn="{StaticResource {x:Type DataGridColumnHeader}}" x:Key="DataGridNameColumn" TargetType="DataGridColumnHeader">
+            <Setter Property="Background" Value="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Path=DataContext.ThemeData.NavigationBarBackground}"/>
             <Setter Property="Content" Value="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Path=DataContext.LocalizationData.Name}" />
         </Style>
         <Style x:Key="DataGridPriceColumn" TargetType="DataGridColumnHeader">
+            <Setter Property="Background" Value="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Path=DataContext.ThemeData.NavigationBarBackground}"/>
             <Setter Property="Content" Value="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Path=DataContext.LocalizationData.Price}" />
         </Style>
         <Style x:Key="DataGridVolumeColumn" TargetType="DataGridColumnHeader">
+            <Setter Property="Background" Value="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Path=DataContext.ThemeData.NavigationBarBackground}"/>
             <Setter Property="Content" Value="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Path=DataContext.LocalizationData.TotalVolume}" />
         </Style>
     </UserControl.Resources>
-    <Grid Background="#F8FAFC">
+    <Grid Background="{Binding ThemeData.MainContentBackground}">
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
             <RowDefinition Height="*" />
@@ -51,6 +59,13 @@
             </TextBox>
         </Grid>
         <Button x:Name="Search" Content="{Binding LocalizationData.Search}" Grid.Row="0" Grid.Column="1 " HorizontalAlignment="Right" Margin="0 40 40 0" Padding="20 10">
+            <Button.Style>
+                <Style TargetType="Button">
+                    <Setter Property="Foreground" Value="{Binding ThemeData.Foreground}" />
+                    <Setter Property="Background" Value="{Binding ThemeData.NavigationBarBackground}" />
+                    <Setter Property="BorderBrush" Value="{Binding ThemeData.BorderBrush}" />
+                </Style>
+            </Button.Style>
             <Button.Resources>
                 <Style TargetType="Border">
                     <Setter Property="CornerRadius" Value="20" />
@@ -59,17 +74,25 @@
         </Button>
         <DataGrid Grid.Row="1" x:Name="Top10Coins" Height="auto" CanUserAddRows="False" AutoGenerateColumns="False" 
                   HorizontalAlignment="Center" VerticalAlignment="Center" CanUserResizeRows="False" 
-                  CanUserReorderColumns="False" CanUserResizeColumns="False" IsReadOnly="True"
-                  GridLinesVisibility="None" HeadersVisibility="Column">
+                  CanUserReorderColumns="False" CanUserResizeColumns="False" IsReadOnly="True" RowBackground="{Binding ThemeData.NavigationBarBackground}"
+                  GridLinesVisibility="None" HeadersVisibility="Column" Background="{Binding ThemeData.NavigationBarBackground}" 
+                  Foreground="{Binding ThemeData.Foreground}" >
+            <DataGrid.Resources>
+                <Style x:Key="textStyle" TargetType="TextBlock">
+                    <Setter Property="Foreground" Value ="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Path=DataContext.ThemeData.Foreground}" />
+                </Style>
+            </DataGrid.Resources>
             <DataGrid.Columns>
-                <DataGridTextColumn Header="#" Binding="{Binding MarketCapRank}" />
-                <DataGridTemplateColumn HeaderStyle="{StaticResource DataGridNameColumn}">
+                <DataGridTextColumn HeaderStyle="{StaticResource DataGridRankColumn}" Binding="{Binding MarketCapRank}" ElementStyle="{StaticResource textStyle}" >
+                </DataGridTextColumn>
+                <DataGridTemplateColumn HeaderStyle="{StaticResource DataGridNameColumn}"  >
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <Button>
                                 <Button.Style>
                                     <Style TargetType="Button">
                                         <Setter Property="BorderThickness" Value="0" />
+                                        <Setter Property="Foreground" Value="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Path=DataContext.ThemeData.Foreground}" />
                                         <Setter Property="Background" Value="Transparent" />
                                         <Setter Property="Template">
                                             <Setter.Value>
@@ -107,12 +130,12 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTemplateColumn HeaderStyle="{StaticResource DataGridPriceColumn}">
+                <DataGridTemplateColumn HeaderStyle="{StaticResource DataGridPriceColumn}" >
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <StackPanel Orientation="Horizontal">
-                                <TextBlock Text="$" />
-                                <TextBlock Text="{Binding CurrentPrice, StringFormat={}{0:N2}}" />
+                            <StackPanel Orientation="Horizontal" Background="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Path=DataContext.ThemeData.NavigationBarBackground}">
+                                <TextBlock Text="$" Style="{StaticResource textStyle}" />
+                                <TextBlock Text="{Binding CurrentPrice, StringFormat={}{0:N2}}" Style="{StaticResource textStyle}" />
                             </StackPanel>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
@@ -121,8 +144,8 @@
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <StackPanel Orientation="Horizontal">
-                                <TextBlock Text="$" />
-                                <TextBlock Text="{Binding TotalVolume, StringFormat={}{0:N0}}" />
+                                <TextBlock Text="$" Style="{StaticResource textStyle}" />
+                                <TextBlock Text="{Binding TotalVolume, StringFormat={}{0:N0}}" Style="{StaticResource textStyle}" />
                             </StackPanel>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
