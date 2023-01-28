@@ -8,7 +8,7 @@ namespace DCTTestAssignment.Data.LocalizationData.ConvertViewLocalizationData
 {
     public class ConvertViewUkrainianLocalizationData : IConvertViewLocalizationData
     {
-        public string From =>"Назва криптовалюти, що віддаєте";
+        public string From =>"Назва криптовалюти, з якої конвертувати";
 
         public string To => "Криптовалюта, у яку конвертувати";
 

@@ -12,4 +12,6 @@ public interface IHomeViewLocalizationData
     public string? Price { get; }
     public string? TotalVolume { get; }
     public string? Search { get; }
+    public string? Ath { get; }
+    public string? AthDate { get; }
 }

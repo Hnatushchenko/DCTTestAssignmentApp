@@ -12,4 +12,8 @@ public class HomeViewEnglishLocalizationData : IHomeViewLocalizationData
     public string? Price => "Price";
     public string? TotalVolume => "Total Volume";
     public string? Search => "Search";
+
+    public string? Ath => "All-time high";
+
+    public string? AthDate => "Ath date";
 }

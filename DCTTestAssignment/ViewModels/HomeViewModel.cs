@@ -47,7 +47,7 @@ namespace DCTTestAssignment.ViewModels
 
         protected override async Task OnInitializeAsync(CancellationToken cancellationToken)
         {
-            var coins = (await _coinGeckoApiClient.GetCoinsMarketsAsync()).Take(10);
+            var coins = await _coinGeckoApiClient.GetCoinsMarketsAsync();
             Top10Coins = new ObservableCollection<CoinsMarkets>(coins);
         }
 
