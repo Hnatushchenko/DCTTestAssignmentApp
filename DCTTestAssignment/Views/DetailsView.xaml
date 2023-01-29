@@ -134,7 +134,7 @@
                             <DataTemplate>
                                 <StackPanel Orientation="Horizontal">
                                     <TextBlock Text="$" Style="{StaticResource textStyle}"/>
-                                    <TextBlock Text="{Binding Last, StringFormat={}{0:N2}}" Style="{StaticResource textStyle}" />
+                                    <TextBlock Text="{Binding Last, StringFormat={}{0:N6}}" Style="{StaticResource textStyle}" />
                                 </StackPanel>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>

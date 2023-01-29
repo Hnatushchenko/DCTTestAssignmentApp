@@ -43,9 +43,9 @@ public class Bootstrapper : BootstrapperBase
         _container.Singleton<ILocalizationDataProvider<IDetailsViewLocalizationData>, LocalizationDataProvider<IDetailsViewLocalizationData>>();
         _container.Singleton<ILocalizationDataProvider<IConvertViewLocalizationData>, LocalizationDataProvider<IConvertViewLocalizationData>>();
         _container.Singleton<ShellViewModel>();
-        _container.Singleton<DetailsViewModel>();
-        _container.Singleton<HomeViewModel>();
-        _container.Singleton<ConvertViewModel>();
+        _container.PerRequest<DetailsViewModel>();
+        _container.PerRequest<HomeViewModel>();
+        _container.PerRequest<ConvertViewModel>();
     }
 
     protected override object GetInstance(Type service, string key)

@@ -20,12 +20,10 @@ namespace DCTTestAssignment.ViewModels;
 
 public class ShellViewModel : Conductor<object>
 {
-    private readonly HomeViewModel _homeViewModel;
-    private readonly DetailsViewModel _detailsViewModel;
-    private readonly ConvertViewModel _convertViewModel;
     private readonly IThemeDataProvider _themeDataProvider;
     private readonly IEventAggregator _eventAggregator;
     private readonly ILocalizationDataProvider<IShellViewLocalizationData> _localizationDataProvider;
+    private readonly SimpleContainer _container;
 
     private IShellViewLocalizationData _localizationData = null!;
     public IShellViewLocalizationData LocalizationData
@@ -41,16 +39,14 @@ public class ShellViewModel : Conductor<object>
         set { _themeData = value; NotifyOfPropertyChange(() => ThemeData); }
     }
 
-    public ShellViewModel(ILocalizationDataProvider<IShellViewLocalizationData> localizationDataProvider, HomeViewModel homeViewModel, DetailsViewModel detailsViewModel, IThemeDataProvider themeDataProvider, ConvertViewModel convertViewModel, IEventAggregator eventAggregator)
+    public ShellViewModel(ILocalizationDataProvider<IShellViewLocalizationData> localizationDataProvider, IThemeDataProvider themeDataProvider, IEventAggregator eventAggregator, SimpleContainer container)
     {
         _localizationDataProvider = localizationDataProvider;
-        _homeViewModel = homeViewModel;
-        _detailsViewModel = detailsViewModel;
         _themeDataProvider = themeDataProvider;
-        _convertViewModel = convertViewModel;
         _eventAggregator = eventAggregator;
-        SelectedLanguage = "English";
-        SelectedTheme = "Light";
+        _container = container;
+        SelectedLanguage = _localizationDataProvider.CurrentLocalizationName;
+        SelectedTheme = _themeDataProvider.CurrentThemeName;
     }
 
     private string _selectedLanguage = null!;
@@ -79,36 +75,38 @@ public class ShellViewModel : Conductor<object>
 
     private void ChangeApplicationLanguage()
     {
-        LocalizationData = _localizationDataProvider.GetLocalizationData(SelectedLanguage);
-        _eventAggregator.PublishOnCurrentThreadAsync(new LanguageChanged(SelectedLanguage)).Wait();
+        _localizationDataProvider.CurrentLocalizationName = SelectedLanguage;
+        LocalizationData = _localizationDataProvider.GetLocalizationData();
+        _eventAggregator.PublishOnCurrentThreadAsync(new LanguageChanged(SelectedLanguage));
     }
 
     private void ChangeApplicationTheme()
     {
-        ThemeData = _themeDataProvider.GetThemeData(SelectedTheme);
-        _homeViewModel.ThemeData = ThemeData;
-        _detailsViewModel.ThemeData = ThemeData;
-        _convertViewModel.ThemeData = ThemeData;
+        _themeDataProvider.CurrentThemeName = SelectedTheme;
+        ThemeData = _themeDataProvider.GetThemeData();
+        _eventAggregator.PublishOnCurrentThreadAsync(new ThemeChanged(SelectedTheme));
     }
 
     protected override async Task OnInitializeAsync(CancellationToken cancellationToken)
     {
-        await LoadHomePage();
+        await LoadHomePageAsync();
     }
 
-    public async Task LoadHomePage()
+    public async Task LoadHomePageAsync()
     {
         if (ActiveItem?.GetType() == typeof(HomeViewModel))
             return;
 
-        await ActivateItemAsync(_homeViewModel);
+        var homeViewModel = _container.GetInstance<HomeViewModel>();
+        await ActivateItemAsync(homeViewModel);
     }
 
     public async Task OpenDetailsViewAsync(string cryptocurrencyId)
     {
-        _detailsViewModel.CryptocurrencyId = cryptocurrencyId;
-        await _detailsViewModel.LoadDataAsync();
-        await ActivateItemAsync(_detailsViewModel);
+        var detailsViewModel = _container.GetInstance<DetailsViewModel>();
+        detailsViewModel.CryptocurrencyId = cryptocurrencyId;
+        await detailsViewModel.LoadDataAsync();
+        await ActivateItemAsync(detailsViewModel);
     }
 
     public async Task LoadConverterPageAsync()
@@ -116,6 +114,7 @@ public class ShellViewModel : Conductor<object>
         if (ActiveItem?.GetType() == typeof(ConvertViewModel))
             return;
 
-        await ActivateItemAsync(_convertViewModel);
+        var convertViewModel = _container.GetInstance<ConvertViewModel>();
+        await ActivateItemAsync(convertViewModel);
     }
 }

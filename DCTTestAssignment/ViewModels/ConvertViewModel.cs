@@ -11,20 +11,26 @@ using DCTTestAssignment.Data.LocalizationData.ConvertViewLocalizationData;
 using DCTTestAssignment.Data.LocalizationData;
 using DCTTestAssignment.Models.EventArgsModels;
 using System.Threading;
+using DCTTestAssignment.Data.ThemeSupport;
 
 namespace DCTTestAssignment.ViewModels;
 
-public class ConvertViewModel : Screen, IHandle<LanguageChanged>
+public class ConvertViewModel : Screen, IHandle<LanguageChanged>, IHandle<ThemeChanged>
 {
 	private readonly ICoinGeckoApiClient _coinGeckoApiClient;
     private readonly IEventAggregator _eventAggregator;
+    private readonly IThemeDataProvider _themeDataProvider;
     private readonly ILocalizationDataProvider<IConvertViewLocalizationData> _localizationDataProvider;
-    public ConvertViewModel(ICoinGeckoApiClient coinGeckoApiClient, ILocalizationDataProvider<IConvertViewLocalizationData> localizationDataProvider, IEventAggregator eventAggregator)
+
+    public ConvertViewModel(ICoinGeckoApiClient coinGeckoApiClient, ILocalizationDataProvider<IConvertViewLocalizationData> localizationDataProvider, IEventAggregator eventAggregator, IThemeDataProvider themeDataProvider)
     {
         _coinGeckoApiClient = coinGeckoApiClient;
         _localizationDataProvider = localizationDataProvider;
         _eventAggregator = eventAggregator;
+        _themeDataProvider = themeDataProvider;
         _eventAggregator.SubscribeOnPublishedThread(this);
+        LocalizationData = _localizationDataProvider.GetLocalizationData();
+        ThemeData = _themeDataProvider.GetThemeData();
     }
 
     private IThemeData? _themeData;
@@ -113,6 +119,12 @@ public class ConvertViewModel : Screen, IHandle<LanguageChanged>
     public Task HandleAsync(LanguageChanged message, CancellationToken cancellationToken)
     {
         LocalizationData = _localizationDataProvider.GetLocalizationData(message.Language);
+        return Task.CompletedTask;
+    }
+
+    public Task HandleAsync(ThemeChanged message, CancellationToken cancellationToken)
+    {
+        ThemeData = _themeDataProvider.GetThemeData(message.ThemeName);
         return Task.CompletedTask;
     }
 }

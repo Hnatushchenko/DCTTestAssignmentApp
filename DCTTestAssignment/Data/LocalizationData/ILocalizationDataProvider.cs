@@ -2,6 +2,8 @@
 {
     public interface ILocalizationDataProvider<TLocalizationData>
     {
-        TLocalizationData GetLocalizationData(string language);
+        public string CurrentLocalizationName { get; set; }
+        TLocalizationData GetLocalizationData(string localization);
+        TLocalizationData GetLocalizationData();
     }
 }

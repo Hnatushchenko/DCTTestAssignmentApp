@@ -10,7 +10,21 @@ namespace DCTTestAssignment.Data.ThemeSupport;
 
 public class ThemeDataProvider : IThemeDataProvider
 {
-    private Dictionary<string, IThemeData> _applicationThemes = new Dictionary<string, IThemeData>();
+    private string _currentThemeName = "Light";
+    public string CurrentThemeName
+    {
+        get { return _currentThemeName; }
+        set
+        {
+            if (_applicationThemes.ContainsKey(value) == false)
+            {
+                throw new NotSupportedException($"{value} theme is not supported.");
+            }
+            _currentThemeName = value;
+        }
+    }
+
+    private readonly Dictionary<string, IThemeData> _applicationThemes = new Dictionary<string, IThemeData>();
 
     public ThemeDataProvider()
     {
@@ -35,5 +49,10 @@ public class ThemeDataProvider : IThemeDataProvider
         }
 
         return _applicationThemes[themeName];
+    }
+
+    public IThemeData GetThemeData()
+    {
+        return _applicationThemes[CurrentThemeName];
     }
 }

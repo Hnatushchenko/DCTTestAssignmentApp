@@ -4,6 +4,7 @@ using CoinGecko.Responces;
 using DCTTestAssignment.Data.LocalizationData;
 using DCTTestAssignment.Data.LocalizationData.HomeLocalizationData;
 using DCTTestAssignment.Data.LocalizationData.ShellViewLocalizationData;
+using DCTTestAssignment.Data.ThemeSupport;
 using DCTTestAssignment.Data.ThemeSupport.ThemeData;
 using DCTTestAssignment.Models.EventArgsModels;
 using System;
@@ -18,20 +19,24 @@ using System.Windows.Input;
 
 namespace DCTTestAssignment.ViewModels;
 
-public class HomeViewModel : Screen, IHandle<LanguageChanged>
+public class HomeViewModel : Screen, IHandle<LanguageChanged>, IHandle<ThemeChanged>
 {
     private readonly ICoinGeckoApiClient _coinGeckoApiClient;
     private readonly IEventAggregator _eventAggregator;
+    private readonly IThemeDataProvider _themeDataProvider;
     private readonly SimpleContainer _container;
     private readonly ILocalizationDataProvider<IHomeViewLocalizationData> _localizationDataProvider;
 
-    public HomeViewModel(ICoinGeckoApiClient coinGeckoApiClient, SimpleContainer container, IEventAggregator eventAggregator, ILocalizationDataProvider<IHomeViewLocalizationData> localizationDataProvider)
+    public HomeViewModel(ICoinGeckoApiClient coinGeckoApiClient, SimpleContainer container, IEventAggregator eventAggregator, ILocalizationDataProvider<IHomeViewLocalizationData> localizationDataProvider, IThemeDataProvider themeDataProvider)
     {
         _coinGeckoApiClient = coinGeckoApiClient;
         _container = container;
         _localizationDataProvider = localizationDataProvider;
         _eventAggregator = eventAggregator;
         _eventAggregator.SubscribeOnUIThread(this);
+        _themeDataProvider = themeDataProvider;
+        LocalizationData = _localizationDataProvider.GetLocalizationData();
+        ThemeData = _themeDataProvider.GetThemeData();
     }
 
     protected override async Task OnInitializeAsync(CancellationToken cancellationToken)
@@ -95,6 +100,12 @@ public class HomeViewModel : Screen, IHandle<LanguageChanged>
     public Task HandleAsync(LanguageChanged message, CancellationToken cancellationToken)
     {
         LocalizationData = _localizationDataProvider.GetLocalizationData(message.Language);
+        return Task.CompletedTask;
+    }
+
+    public Task HandleAsync(ThemeChanged message, CancellationToken cancellationToken)
+    {
+        ThemeData = _themeDataProvider.GetThemeData(message.ThemeName);
         return Task.CompletedTask;
     }
 }

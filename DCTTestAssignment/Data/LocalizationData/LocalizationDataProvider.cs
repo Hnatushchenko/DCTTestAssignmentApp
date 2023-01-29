@@ -6,13 +6,29 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Controls.Primitives;
 
 namespace DCTTestAssignment.Data.LocalizationData;
 
 public class LocalizationDataProvider<TLocalizationData> : ILocalizationDataProvider<TLocalizationData>
 {
+    private string _currentLocalizationName = "English";
+    public string CurrentLocalizationName
+    {
+        get { return _currentLocalizationName; }
+        set
+        {
+            if (_viewLocalizationData.ContainsKey(value) == false)
+            {
+                throw new NotSupportedException($"{value} localization is not supported.");
+            }
+            _currentLocalizationName = value;
+        }
+    }
+
     private Dictionary<string, TLocalizationData> _viewLocalizationData = new Dictionary<string, TLocalizationData>();
+    
     public LocalizationDataProvider()
     {
         var localizationDataTypes = Assembly.GetExecutingAssembly().GetTypes()
@@ -30,13 +46,19 @@ public class LocalizationDataProvider<TLocalizationData> : ILocalizationDataProv
             _viewLocalizationData.Add(localizationDataName, localizationData);
         }
     }
-    public TLocalizationData GetLocalizationData(string language)
+
+    public TLocalizationData GetLocalizationData(string localization)
     {
-        if (_viewLocalizationData.ContainsKey(language) == false)
+        if (_viewLocalizationData.ContainsKey(localization) == false)
         {
-            throw new NotSupportedException($"{language} language is not supported.");
+            throw new NotSupportedException($"{localization} localization is not supported.");
         }
 
-        return _viewLocalizationData[language];
+        return _viewLocalizationData[localization];
+    }
+
+    public TLocalizationData GetLocalizationData()
+    {
+        return _viewLocalizationData[CurrentLocalizationName];
     }
 }
