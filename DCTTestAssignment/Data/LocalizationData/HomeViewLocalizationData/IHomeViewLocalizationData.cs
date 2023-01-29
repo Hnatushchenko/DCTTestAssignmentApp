@@ -8,10 +8,10 @@ namespace DCTTestAssignment.Data.LocalizationData.HomeLocalizationData;
 
 public interface IHomeViewLocalizationData
 {
-    public string? Name { get; }
-    public string? Price { get; }
-    public string? TotalVolume { get; }
-    public string? Search { get; }
-    public string? Ath { get; }
-    public string? AthDate { get; }
+    public string Name { get; }
+    public string Price { get; }
+    public string TotalVolume { get; }
+    public string Search { get; }
+    public string Ath { get; }
+    public string AthDate { get; }
 }

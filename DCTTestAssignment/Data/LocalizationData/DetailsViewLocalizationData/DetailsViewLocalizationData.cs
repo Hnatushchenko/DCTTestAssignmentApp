@@ -8,10 +8,10 @@ namespace DCTTestAssignment.Data.LocalizationData.DetailsViewLocalizationData;
 
 public interface IDetailsViewLocalizationData
 {
-    public string? Price { get; }
-    public string? Volume { get; }
-    public string? Source { get; }
-    public string? Pairs { get; }   
-    public string? Confidence { get; }
-    public string? Markets { get; }
+    public string Price { get; }
+    public string Volume { get; }
+    public string Source { get; }
+    public string Pairs { get; }   
+    public string Confidence { get; }
+    public string Markets { get; }
 }
