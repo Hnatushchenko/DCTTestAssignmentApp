@@ -1,4 +1,4 @@
-﻿namespace DCTTestAssignment.Data
+﻿namespace DCTTestAssignment.Data.LocalizationData
 {
     public interface ILocalizationDataProvider<TLocalizationData>
     {

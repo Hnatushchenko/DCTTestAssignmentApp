@@ -1,6 +1,6 @@
 ﻿using Caliburn.Micro;
 using CoinGecko;
-using DCTTestAssignment.Data;
+using DCTTestAssignment.Data.LocalizationData;
 using DCTTestAssignment.Data.LocalizationData.ConvertViewLocalizationData;
 using DCTTestAssignment.Data.LocalizationData.DetailsViewLocalizationData;
 using DCTTestAssignment.Data.LocalizationData.HomeLocalizationData;

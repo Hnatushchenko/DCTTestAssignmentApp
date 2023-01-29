@@ -1,7 +1,6 @@
 ﻿using Caliburn.Micro;
 using CoinGecko;
 using DCTTestAssignment.Data.LocalizationData.ShellViewLocalizationData;
-using DCTTestAssignment.Data;
 using DCTTestAssignment.Data.ThemeSupport.ThemeData;
 using System;
 using System.Collections.Generic;
@@ -9,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using DCTTestAssignment.Data.LocalizationData.ConvertViewLocalizationData;
+using DCTTestAssignment.Data.LocalizationData;
 
 namespace DCTTestAssignment.ViewModels;
 

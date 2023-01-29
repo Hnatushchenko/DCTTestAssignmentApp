@@ -8,9 +8,9 @@ namespace DCTTestAssignment.Data.LocalizationData.ShellViewLocalizationData;
 
 public class ShellViewUkrainianLocalizationData : IShellViewLocalizationData
 {
-    public string? DCTTestAssignment => "DCT Тестове Завдання";
-    public string? Home => "На головну";
-    public string? Converter => "Конвертація";
-    public string? Theme => "Колірний режим";
-    public string? Language => "Мова";
+    public string DCTTestAssignment => "DCT Тестове Завдання";
+    public string Home => "На головну";
+    public string Converter => "Конвертація";
+    public string Theme => "Колірний режим";
+    public string Language => "Мова";
 }

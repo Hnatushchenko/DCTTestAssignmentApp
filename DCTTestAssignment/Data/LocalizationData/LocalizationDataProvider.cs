@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Controls.Primitives;
 
-namespace DCTTestAssignment.Data;
+namespace DCTTestAssignment.Data.LocalizationData;
 
 public class LocalizationDataProvider<TLocalizationData> : ILocalizationDataProvider<TLocalizationData>
 {
@@ -20,11 +20,11 @@ public class LocalizationDataProvider<TLocalizationData> : ILocalizationDataProv
             .Where(type => !type.IsAbstract && !type.IsInterface);
 
         var localizationDataInstances = localizationDataTypes.Select(Activator.CreateInstance).Cast<TLocalizationData>();
-            
+
         foreach (var localizationData in localizationDataInstances)
         {
             if (localizationData is null) continue;
-            
+
             var localizationDataName = localizationData.GetType().Name.Replace("LocalizationData", string.Empty);
             localizationDataName = localizationDataName.Remove(0, count: localizationDataName.IndexOf("View") + "View".Length);
             _viewLocalizationData.Add(localizationDataName, localizationData);
