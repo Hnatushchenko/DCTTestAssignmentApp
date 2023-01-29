@@ -85,7 +85,6 @@ public class ConvertViewModel : Screen, IHandle<LanguageChanged>, IHandle<ThemeC
         if (string.IsNullOrWhiteSpace(CurrencyNameToConvertTo)) return;
         if (decimal.TryParse(CurrencyAmountToConvertFrom, out decimal amountToConvertFrom) == false) return;
 
-        Mouse.OverrideCursor = Cursors.Wait;
         decimal? coinToConvertFromPrice;
         decimal? coinToConvertToPrice;
 
@@ -97,13 +96,11 @@ public class ConvertViewModel : Screen, IHandle<LanguageChanged>, IHandle<ThemeC
         catch (TimeoutException)
         {
             MessageBox.Show(LocalizationData?.TimeoutMessage, "Timeout", MessageBoxButton.OK, MessageBoxImage.Information);
-            Mouse.OverrideCursor = Cursors.Arrow;
             return;
         }
         catch (HttpRequestException ex)
         {
             MessageBox.Show(ex.Message, "Too many requests", MessageBoxButton.OK, MessageBoxImage.Information);
-            Mouse.OverrideCursor = Cursors.Arrow;
             return;
         }
 
@@ -115,8 +112,6 @@ public class ConvertViewModel : Screen, IHandle<LanguageChanged>, IHandle<ThemeC
         {
             CalculatedAmount = (coinToConvertFromPrice * amountToConvertFrom / coinToConvertToPrice).ToString();
         }
-        Mouse.OverrideCursor = Cursors.Arrow;
-        
     }
 
     public Task HandleAsync(LanguageChanged message, CancellationToken cancellationToken)

@@ -64,15 +64,24 @@
             <ColumnDefinition Width="auto" />
         </Grid.ColumnDefinitions>
         <Grid HorizontalAlignment="Center" Grid.Row="0" Grid.Column="0" Margin="0 0 0 20">
-            <StackPanel Orientation="Horizontal">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+            </Grid.RowDefinitions>
+            <StackPanel Orientation="Horizontal" Grid.Row="0">
                 <TextBox x:Name="SearchText" Style="{StaticResource textBoxSearch}">
                     <TextBox.Resources>
                         <Style TargetType="Border">
                             <Setter Property="CornerRadius" Value="20"/>
                         </Style>
                     </TextBox.Resources>
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="TextChanged">
+                            <cal:ActionMessage MethodName="FilterCoinsAsync" />
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
                 </TextBox>
-                <Button x:Name="Search" Content="{Binding LocalizationData.Search}" Grid.Row="0" Grid.Column="0" Margin="0 40 40 0" Padding="20 10">
+                <Button x:Name="SearchAsync" Content="{Binding LocalizationData.Search}" Grid.Row="0" Grid.Column="0" Margin="0 40 40 0" Padding="20 10">
                     <Button.Style>
                         <Style TargetType="Button">
                             <Style.Triggers>
@@ -101,6 +110,22 @@
                         </Style>
                     </Button.Resources>
                 </Button>
+            </StackPanel>
+
+            <StackPanel Grid.Row="1">
+                <TextBlock Text="Search results: " />
+                <ComboBox Margin="0 5 0 0" x:Name="CoinsForSearchBar"  Height="30" Width="300" HorizontalAlignment="Left"
+                      SelectedItem="{Binding SelectedCoin}" IsDropDownOpen="{Binding IsComboBoxDropDownOpen}">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="{Binding Name}" />
+                                <TextBlock Text=" - " />
+                                <TextBlock Text="{Binding Symbol}" />
+                            </StackPanel>
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
             </StackPanel>
         </Grid>
         <DataGrid Grid.Row="1" x:Name="Top10Coins" Height="auto" CanUserAddRows="False" AutoGenerateColumns="False" 
