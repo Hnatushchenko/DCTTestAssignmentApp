@@ -7,6 +7,7 @@ using DCTTestAssignment.Data.LocalizationData.HomeLocalizationData;
 using DCTTestAssignment.Data.LocalizationData.ShellViewLocalizationData;
 using DCTTestAssignment.Data.ThemeSupport;
 using DCTTestAssignment.Data.ThemeSupport.ThemeData;
+using DCTTestAssignment.Models.EventArgsModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,6 +24,7 @@ public class ShellViewModel : Conductor<object>
     private readonly DetailsViewModel _detailsViewModel;
     private readonly ConvertViewModel _convertViewModel;
     private readonly IThemeDataProvider _themeDataProvider;
+    private readonly IEventAggregator _eventAggregator;
     private readonly ILocalizationDataProvider<IShellViewLocalizationData> _localizationDataProvider;
 
     private IShellViewLocalizationData _localizationData = null!;
@@ -39,13 +41,14 @@ public class ShellViewModel : Conductor<object>
         set { _themeData = value; NotifyOfPropertyChange(() => ThemeData); }
     }
 
-    public ShellViewModel(ILocalizationDataProvider<IShellViewLocalizationData> localizationDataProvider, HomeViewModel homeViewModel, DetailsViewModel detailsViewModel, IThemeDataProvider themeDataProvider, ConvertViewModel convertViewModel)
+    public ShellViewModel(ILocalizationDataProvider<IShellViewLocalizationData> localizationDataProvider, HomeViewModel homeViewModel, DetailsViewModel detailsViewModel, IThemeDataProvider themeDataProvider, ConvertViewModel convertViewModel, IEventAggregator eventAggregator)
     {
         _localizationDataProvider = localizationDataProvider;
         _homeViewModel = homeViewModel;
         _detailsViewModel = detailsViewModel;
         _themeDataProvider = themeDataProvider;
         _convertViewModel = convertViewModel;
+        _eventAggregator = eventAggregator;
         SelectedLanguage = "English";
         SelectedTheme = "Light";
     }
@@ -77,9 +80,7 @@ public class ShellViewModel : Conductor<object>
     private void ChangeApplicationLanguage()
     {
         LocalizationData = _localizationDataProvider.GetLocalizationData(SelectedLanguage);
-        _homeViewModel.UpdateLanguage(SelectedLanguage);
-        _detailsViewModel.UpdateLanguage(SelectedLanguage);
-        _convertViewModel.UpdateLanguage(SelectedLanguage);
+        _eventAggregator.PublishOnCurrentThreadAsync(new LanguageChanged(SelectedLanguage)).Wait();
     }
 
     private void ChangeApplicationTheme()

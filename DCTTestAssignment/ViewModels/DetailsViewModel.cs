@@ -5,6 +5,7 @@ using DCTTestAssignment.Data.LocalizationData;
 using DCTTestAssignment.Data.LocalizationData.DetailsViewLocalizationData;
 using DCTTestAssignment.Data.LocalizationData.HomeLocalizationData;
 using DCTTestAssignment.Data.ThemeSupport.ThemeData;
+using DCTTestAssignment.Models.EventArgsModels;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -16,12 +17,13 @@ using System.Windows.Controls;
 
 namespace DCTTestAssignment.ViewModels;
 
-public class DetailsViewModel : Screen
+public class DetailsViewModel : Screen, IHandle<LanguageChanged>
 {
     const string GreenColor = "#16C784";
     const string RedColor = "#EA3943";
 
     private readonly ICoinGeckoApiClient _coinGeckoApiClient;
+    private readonly IEventAggregator _eventAggregator;
     private readonly ILocalizationDataProvider<IDetailsViewLocalizationData> _localizationDataProvider;
 
     private IDetailsViewLocalizationData? _localizationData;
@@ -31,10 +33,12 @@ public class DetailsViewModel : Screen
         set { _localizationData = value; NotifyOfPropertyChange(() => LocalizationData ); }
     }
 
-    public DetailsViewModel(ICoinGeckoApiClient coinGeckoApiClient, ILocalizationDataProvider<IDetailsViewLocalizationData> localizationDataProvider)
+    public DetailsViewModel(ICoinGeckoApiClient coinGeckoApiClient, ILocalizationDataProvider<IDetailsViewLocalizationData> localizationDataProvider, IEventAggregator eventAggregator)
     {
         _coinGeckoApiClient = coinGeckoApiClient;
         _localizationDataProvider = localizationDataProvider;
+        _eventAggregator = eventAggregator;
+        _eventAggregator.SubscribeOnPublishedThread(this);
     }
 
     public async Task LoadDataAsync()
@@ -88,8 +92,8 @@ public class DetailsViewModel : Screen
         }
     }
 
-    private IThemeData _themeData;
-    public IThemeData ThemeData
+    private IThemeData? _themeData;
+    public IThemeData? ThemeData
     {
         get { return _themeData; }
         set { _themeData = value; NotifyOfPropertyChange(() => ThemeData); }
@@ -149,8 +153,9 @@ public class DetailsViewModel : Screen
         Process.Start(processStartInfo);
     }
 
-    public void UpdateLanguage(string language)
+    public Task HandleAsync(LanguageChanged message, CancellationToken cancellationToken)
     {
-        LocalizationData = _localizationDataProvider.GetLocalizationData(language);
+        LocalizationData = _localizationDataProvider.GetLocalizationData(message.Language);
+        return Task.CompletedTask;
     }
 }

@@ -9,17 +9,22 @@ using System.Text;
 using System.Threading.Tasks;
 using DCTTestAssignment.Data.LocalizationData.ConvertViewLocalizationData;
 using DCTTestAssignment.Data.LocalizationData;
+using DCTTestAssignment.Models.EventArgsModels;
+using System.Threading;
 
 namespace DCTTestAssignment.ViewModels;
 
-public class ConvertViewModel : Screen
+public class ConvertViewModel : Screen, IHandle<LanguageChanged>
 {
 	private readonly ICoinGeckoApiClient _coinGeckoApiClient;
+    private readonly IEventAggregator _eventAggregator;
     private readonly ILocalizationDataProvider<IConvertViewLocalizationData> _localizationDataProvider;
-    public ConvertViewModel(ICoinGeckoApiClient coinGeckoApiClient, ILocalizationDataProvider<IConvertViewLocalizationData> localizationDataProvider)
+    public ConvertViewModel(ICoinGeckoApiClient coinGeckoApiClient, ILocalizationDataProvider<IConvertViewLocalizationData> localizationDataProvider, IEventAggregator eventAggregator)
     {
         _coinGeckoApiClient = coinGeckoApiClient;
         _localizationDataProvider = localizationDataProvider;
+        _eventAggregator = eventAggregator;
+        _eventAggregator.SubscribeOnPublishedThread(this);
     }
 
     private IThemeData? _themeData;
@@ -64,11 +69,6 @@ public class ConvertViewModel : Screen
         set { _calculatedAmount = value; NotifyOfPropertyChange(() => CalculatedAmount); }
     }
 
-    public void UpdateLanguage(string language)
-    {
-        LocalizationData = _localizationDataProvider.GetLocalizationData(language);
-    }
-
     public async Task ConvertAsync()
 	{
         CalculatedAmount = "";
@@ -108,5 +108,11 @@ public class ConvertViewModel : Screen
         }
 
         CalculatedAmount = (coinToConvertFromPrice * amountToConvertFrom / coinToConvertToPrice).ToString();
+    }
+
+    public Task HandleAsync(LanguageChanged message, CancellationToken cancellationToken)
+    {
+        LocalizationData = _localizationDataProvider.GetLocalizationData(message.Language);
+        return Task.CompletedTask;
     }
 }
