@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         Title="{Binding LocalizationData.DCTTestAssignment}" Height="450" Width="800"
         WindowStartupLocation="CenterScreen" 
-        Foreground="{Binding ThemeData.Foreground}">
+        Foreground="{Binding ThemeData.Foreground}" WindowState="Maximized">
     <Window.Resources>
     </Window.Resources>
     <Grid>
