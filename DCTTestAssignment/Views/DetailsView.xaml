@@ -14,18 +14,22 @@
         <customConverters:DictionaryDecimalValuesBindingConverter x:Key="DictionaryDecimalValuesBindingConverter" />
         <customConverters:DictionaryDoubleValuesBindingConverter x:Key="DictionaryDoubleValuesBindingConverter" />
         <Style x:Key="DataGridSourceColumn" TargetType="DataGridColumnHeader">
+            <Setter Property="Padding" Value="20 0 0 0" />
             <Setter Property="Background" Value="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Path=DataContext.ThemeData.NavigationBarBackground}"/>
             <Setter Property="Content" Value="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Path=DataContext.LocalizationData.Source}" />
         </Style>
         <Style x:Key="DataGridPairsColumn" TargetType="DataGridColumnHeader">
+            <Setter Property="Padding" Value="25 0 0 0" />
             <Setter Property="Background" Value="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Path=DataContext.ThemeData.NavigationBarBackground}"/>
             <Setter Property="Content" Value="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Path=DataContext.LocalizationData.Pairs}" />
         </Style>
         <Style x:Key="DataGridPriceColumn" TargetType="DataGridColumnHeader">
             <Setter Property="Background" Value="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Path=DataContext.ThemeData.NavigationBarBackground}"/>
+            <Setter Property="Padding" Value="40 0 0 0" />
             <Setter Property="Content" Value="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Path=DataContext.LocalizationData.Price}" />
         </Style>
         <Style x:Key="DataGridVolumeColumn" TargetType="DataGridColumnHeader">
+            <Setter Property="Padding" Value="20 0 0 0" />
             <Setter Property="Background" Value="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Path=DataContext.ThemeData.NavigationBarBackground}"/>
             <Setter Property="Content" Value="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Path=DataContext.LocalizationData.Volume}" />
         </Style>

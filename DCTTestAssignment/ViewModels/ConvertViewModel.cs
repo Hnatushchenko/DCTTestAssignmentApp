@@ -12,6 +12,9 @@ using DCTTestAssignment.Data.LocalizationData;
 using DCTTestAssignment.Models.EventArgsModels;
 using System.Threading;
 using DCTTestAssignment.Data.ThemeSupport;
+using System.Windows.Input;
+using System.Windows;
+using System.Net.Http;
 
 namespace DCTTestAssignment.ViewModels;
 
@@ -82,38 +85,38 @@ public class ConvertViewModel : Screen, IHandle<LanguageChanged>, IHandle<ThemeC
         if (string.IsNullOrWhiteSpace(CurrencyNameToConvertTo)) return;
         if (decimal.TryParse(CurrencyAmountToConvertFrom, out decimal amountToConvertFrom) == false) return;
 
-        CalculatedAmount = LocalizationData?.Loading;
+        Mouse.OverrideCursor = Cursors.Wait;
+        decimal? coinToConvertFromPrice;
+        decimal? coinToConvertToPrice;
 
-        int timeout = 10000;
-        var coinToConvertFromPriceTask = _coinGeckoApiClient.GetCoinPriceInUSDByNameOrSymbol(CurrencyNameToConvertFrom);
-        if (await Task.WhenAny(coinToConvertFromPriceTask, Task.Delay(timeout)) != coinToConvertFromPriceTask)
+        try
         {
-            CalculatedAmount = LocalizationData?.TimeoutMessage;
+            coinToConvertToPrice = await _coinGeckoApiClient.GetCoinPriceInUSDByNameOrSymbol(CurrencyNameToConvertTo).WaitAsync(TimeSpan.FromSeconds(10));
+            coinToConvertFromPrice = await _coinGeckoApiClient.GetCoinPriceInUSDByNameOrSymbol(CurrencyNameToConvertFrom).WaitAsync(TimeSpan.FromSeconds(10));
+        }
+        catch (TimeoutException)
+        {
+            MessageBox.Show(LocalizationData?.TimeoutMessage, "Timeout", MessageBoxButton.OK, MessageBoxImage.Information);
+            Mouse.OverrideCursor = Cursors.Arrow;
+            return;
+        }
+        catch (HttpRequestException ex)
+        {
+            MessageBox.Show(ex.Message, "Too many requests", MessageBoxButton.OK, MessageBoxImage.Information);
+            Mouse.OverrideCursor = Cursors.Arrow;
             return;
         }
 
-        var coinToConvertToPriceTask = _coinGeckoApiClient.GetCoinPriceInUSDByNameOrSymbol(CurrencyNameToConvertTo);
-        if (await Task.WhenAny(coinToConvertToPriceTask, Task.Delay(timeout)) != coinToConvertToPriceTask)
+        if (coinToConvertFromPrice is null || coinToConvertToPrice is null)
         {
-            CalculatedAmount = LocalizationData?.TimeoutMessage;
-            return;
+            MessageBox.Show(LocalizationData?.CoinNotFoundMessage, LocalizationData?.NotFound, MessageBoxButton.OK, MessageBoxImage.Information);
         }
-
-        decimal? coinToConvertFromPrice = coinToConvertFromPriceTask.Result;
-        decimal? coinToConvertToPrice = coinToConvertToPriceTask.Result;
-
-        if (coinToConvertFromPrice is null)
+        else
         {
-            CalculatedAmount = LocalizationData?.CoinNotFoundMessage;
-            return;
+            CalculatedAmount = (coinToConvertFromPrice * amountToConvertFrom / coinToConvertToPrice).ToString();
         }
-        if (coinToConvertToPrice is null)
-        {
-            CalculatedAmount = LocalizationData?.CoinNotFoundMessage;
-            return;
-        }
-
-        CalculatedAmount = (coinToConvertFromPrice * amountToConvertFrom / coinToConvertToPrice).ToString();
+        Mouse.OverrideCursor = Cursors.Arrow;
+        
     }
 
     public Task HandleAsync(LanguageChanged message, CancellationToken cancellationToken)

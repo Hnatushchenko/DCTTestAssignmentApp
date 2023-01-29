@@ -15,6 +15,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 
 namespace DCTTestAssignment.ViewModels;
@@ -81,20 +82,26 @@ public class HomeViewModel : Screen, IHandle<LanguageChanged>, IHandle<ThemeChan
 
     public async Task Search()
     {
+        Mouse.OverrideCursor = Cursors.Wait;
         var coinList = await _coinGeckoApiClient.GetCoinListAsync();
         var coin = coinList.FirstOrDefault(coin => 
-            coin.Name?.ToLower() == _searchText.ToLower());
+            coin.Name?.ToLower() == SearchText.ToLower());
 
         if (coin is null)
         {
             coin = coinList.FirstOrDefault(coin =>
-            coin.Symbol?.ToLower() == _searchText.ToLower());
+            coin.Symbol?.ToLower() == SearchText.ToLower());
         }
 
         if (coin is not null && coin.Id is not null)
         {
             await OpenDetailsAsync(coin.Id);
         }
+        else
+        {
+            MessageBox.Show(LocalizationData?.NotFoundMessage, LocalizationData?.NotFound, MessageBoxButton.OK, MessageBoxImage.Information);
+        }
+        Mouse.OverrideCursor = Cursors.Arrow;
     }
 
     public Task HandleAsync(LanguageChanged message, CancellationToken cancellationToken)

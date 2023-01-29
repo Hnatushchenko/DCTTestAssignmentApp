@@ -16,4 +16,5 @@ public interface IConvertViewLocalizationData
     string Loading { get; }
     string TimeoutMessage { get; }
     string CoinNotFoundMessage { get; }
+    string NotFound { get; }
 }

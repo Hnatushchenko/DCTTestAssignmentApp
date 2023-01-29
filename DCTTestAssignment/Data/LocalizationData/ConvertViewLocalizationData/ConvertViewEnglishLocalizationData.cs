@@ -23,4 +23,6 @@ public class ConvertViewEnglishLocalizationData : IConvertViewLocalizationData
     public string TimeoutMessage => "Response timeout expired. Sorry!";
 
     public string CoinNotFoundMessage => "Coin, that you are looking for, is not found";
+
+    public string NotFound => "Not found";
 }

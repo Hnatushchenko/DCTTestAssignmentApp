@@ -14,4 +14,6 @@ public class HomeViewEnglishLocalizationData : IHomeViewLocalizationData
     public string Search => "Search";
     public string Ath => "All-time high";
     public string AthDate => "Ath date";
+    public string NotFound => "Not found";
+    public string NotFoundMessage => "Cryptocurrency, that you are looking for, is not found";
 }

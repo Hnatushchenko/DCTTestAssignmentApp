@@ -14,4 +14,6 @@ public interface IHomeViewLocalizationData
     public string Search { get; }
     public string Ath { get; }
     public string AthDate { get; }
+    public string NotFound { get; }
+    public string NotFoundMessage { get; }
 }

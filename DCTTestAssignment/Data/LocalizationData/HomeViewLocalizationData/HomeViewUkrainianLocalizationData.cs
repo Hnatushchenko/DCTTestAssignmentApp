@@ -14,4 +14,6 @@ public class HomeViewUkrainianLocalizationData : IHomeViewLocalizationData
     public string Search => "Шукати";
     public string Ath => "Історичний максимум";
     public string AthDate => "Дата максимуму";
+    public string NotFound => "Не знайдено";
+    public string NotFoundMessage => "Криптовалюту з даним іменем або кодом не знайдено";
 }

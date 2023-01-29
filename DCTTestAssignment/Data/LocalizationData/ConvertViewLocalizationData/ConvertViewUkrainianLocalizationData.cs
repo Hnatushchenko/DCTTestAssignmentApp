@@ -23,4 +23,6 @@ public class ConvertViewUkrainianLocalizationData : IConvertViewLocalizationData
     public string TimeoutMessage => "Час очікування вичервано. Вибачне.";
 
     public string CoinNotFoundMessage => "Криптовалюту не знайдено";
+
+    public string NotFound => "Не знайдено";
 }
